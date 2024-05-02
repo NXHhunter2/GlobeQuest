@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    {% block head %}
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{ url_for( 'static', filename='style.css', v=1)}}">
+    {% block additional_styles %}{% endblock %}
+    <title>{% block title %}GeoDraw{% endblock %}</title>
+    {% endblock %}
+</head>
+<body>
+    <div class="unavailable">
+        Sorry your device is not supported :(
+    </div>
+    <header>
+        {% block header %}
+            <!-- <img src="//capp.nicepage.com/53cb18063e177f9bcb15d084da0519c2d68d608e/images/default-logo.png" alt="logo" class="logo"> -->
+            <img src="{{ url_for( 'static', filename='logo.png', v=1)}}" alt="logo" class="logo">
+        {% endblock %}
+    </header>
+    <div id="content">{% block content %}{% endblock %}</div>
+
+    <footer id="footer">
+        {% block footer %}
+            GeoDraw Inc.
+        {% endblock %}
+    </footer>
+    {% block scripts %}
+    <script src="{{ url_for( 'static', filename='main.js', v=1)}}"></script>
+    {% endblock %}
+    <script>
+        document.getElementsByClassName('logo')[0].addEventListener('click', ()=>{
+            location.href = '/';
+        })
+    </script>
+</body>
+</html>

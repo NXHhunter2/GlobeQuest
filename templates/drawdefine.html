@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}GeoDraw{% endblock %}
+
+{% block additional_styles %}
+<link rel="stylesheet" href="{{ url_for( 'static', filename='drawdefine.css', v=1)}}">
+{% endblock %}
+
+{% block content %}
+<div class="gradient">
+    <section class="temp first">Drawing</section>
+    <section class="temp second">You'll have to draw outlines of different countries and then algorithm will compare these drawings to the real outlines.</section>
+    <input type="range" step="1" max="2" id="time-range" value="2">
+    <label for="time-range" class="temp second time-output">30s</label>    
+    <div class="btns">
+        <a class="temp third" id="world">World</a>
+        <div class="temp second inter">or</div>
+        <a class="temp third button-2" id="europe">Europe</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for( 'static', filename='to_europe.js', v=1)}}"></script>
+<script>
+    document.getElementById("time-range").addEventListener("change", ()=>{
+        switch(document.getElementById("time-range").value){
+            case "0": 
+                document.getElementsByClassName("time-output")[0].innerHTML = "10s";
+                localStorage.setItem('time', 10);
+                break;
+            case "1": 
+                document.getElementsByClassName("time-output")[0].innerHTML = "15s";
+                localStorage.setItem('time', 15);
+                break;
+            case "2": 
+                document.getElementsByClassName("time-output")[0].innerHTML = "30s";
+                localStorage.setItem('time', 30);
+                break;
+            default:
+                document.getElementsByClassName("time-output")[0].innerHTML = "30s";
+                localStorage.setItem('time', 30);
+                break;
+
+        }
+    })
+</script>
+{% endblock %}

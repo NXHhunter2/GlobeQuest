@@ -1,0 +1,50 @@
+.compare-container{
+    color: white;
+}
+.gradient{
+    width: auto;
+}
+.img{
+    width: 500px;
+    border-radius: 15px;
+    margin: 2rem 1rem;
+}
+.img-box{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.third{
+    margin: 1rem 0;
+    order: 0;
+}
+.invisible{
+    display: none !important;
+}
+.inv-text{
+    font-weight: 400;
+    padding: 1rem 0;
+}
+#show-hash{
+    text-decoration: underline;
+    cursor: pointer;
+    transition: all .1s;
+    font-weight: 400;
+}
+#show-hash:hover{
+    color: rgb(236, 236, 236);
+}
+.main-text{
+    font-size: 2em;
+    margin: 1rem 0;
+}
+.lower-text{
+    font-weight: 300;
+}
+.h1{
+    font-size: 2em;
+}
+.h2{
+    font-size: 1.5em;
+}

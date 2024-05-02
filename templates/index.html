@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}GeoDraw{% endblock %}
+
+{% block content %}
+<div class="gradient">
+    <section class="temp first">GeoDraw</section>
+    <section class="temp second">Draw country's outline or try to define it!</section>
+    <div class="btns">
+        <a class="temp third" id="drawdefine">Drawing</a>
+        <a class="temp third button-2" id="detect">Detecting</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}<script src="{{ url_for( 'static', filename='to_europe.js', v=1)}}"></script>{% endblock %}

@@ -1,0 +1,27 @@
+WHAT IS PIP?
+Pip is a package management system used to install and manage software packages written in Python
+For complete set of commands please refer official documention https://pip.pypa.io/en/stable/
+
+NOTE: Run PIP commands in Console-Launcher
+==========================================
+
+** To install Package
+pip install <package name>
+
+Eg: to install "pyqt5" run
+pip install pyqt5
+
+** To upgrade PIP
+pip install --upgrade pip
+
+** To list installed packages
+pip list
+
+** To list outdated packages, and show the latest version available
+pip list --outdated
+
+** To Search for Packages
+pip search "query"
+
+** To Uninstall Packages
+pip uninstall <package name>
