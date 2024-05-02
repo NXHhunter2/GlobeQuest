@@ -1,0 +1,5 @@
+License
+-------
+Portable Launcher: MIT License (https://opensource.org/licenses/MIT)
+Python: See App\Python\License.txt
+PyScripter: See App\PyScripter\PyScripter.chm

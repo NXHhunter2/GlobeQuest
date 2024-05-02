@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}GeoDraw{% endblock %}
+
+{% block additional_styles %}
+<link rel="stylesheet" href="{{ url_for( 'static', filename='compare.css', v=1)}}">
+<link rel="stylesheet" href="{{ url_for( 'static', filename='detect.css', v=1)}}">
+{% endblock %}
+
+{% block content %}
+    <div class="compare-container gradient">
+        <section class="temp first">Detecting</section>
+        <div class="img-box">
+            <img src="{{ url_for( 'static', filename=mainCountry, v=1)}}" class="country-img img"/>
+        </div>
+        <div class="ob">
+            <h1 class="main-text">What country is this???</h1>
+            <div class="btns">
+                <a class="temp third" id="number1">{{ number1 }}</a>
+                <a class="temp third button-2" id="number2">{{ number2 }}</a>
+            </div>
+            <div class="btns">
+                <a class="temp third" id="number3">{{ number3 }}</a>
+                <a class="temp third button-2" id="number4">{{ number4 }}</a>
+            </div>
+        </div>
+        <div class="invisible inv-text">
+            <h1 id="response" class="lower-text h1"></h1>
+            <h2 id="answer" class="lower-text h2"></h2>
+            <a class="temp third" id="detect">Play Again</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    clicked = false
+    
+    let scroll = localStorage.getItem("scroll");
+
+    if(scroll){
+        window.scroll(0, scroll);
+    }
+
+    const show = (element, response) => {
+        if(clicked) return 0;
+
+        clicked = true
+        if(response){
+            document.getElementById('response').innerHTML = "Correct!!!"
+        }
+        else{
+            document.getElementById('response').innerHTML = "Wrong -_-"
+        }
+        document.getElementById('answer').innerHTML = "This is {{ mainName }}"
+        element.classList.remove("invisible");
+        document.getElementsByClassName('ob')[0].classList.add("invisible");
+    }
+
+    let element = document.getElementsByClassName('invisible')[0];
+    let number1 = document.getElementById("number1")
+    let number2 = document.getElementById("number2")
+    let number3 = document.getElementById("number3")
+    let number4 = document.getElementById("number4")
+
+    number1.addEventListener('click', ()=>{
+        if(number1.innerHTML == "{{ mainName }}"){
+            show(element, 1)
+        }
+        else{
+            show(element, 0)
+        }
+    });
+    number2.addEventListener('click', ()=>{
+        if(number2.innerHTML == "{{ mainName }}"){
+            show(element, 1)
+        }
+        else{
+            show(element, 0)
+        }
+    });
+    number3.addEventListener('click', ()=>{
+        if(number3.innerHTML == "{{ mainName }}"){
+            show(element, 1)
+        }
+        else{
+            show(element, 0)
+        }
+    });
+    number4.addEventListener('click', ()=>{
+        if(number4.innerHTML == "{{ mainName }}"){
+            show(element, 1)
+        }
+        else{
+            show(element, 0)
+        }
+    });
+</script>
+<script src="{{ url_for( 'static', filename='detect.js', v=1)}}"></script>
+{% endblock %}

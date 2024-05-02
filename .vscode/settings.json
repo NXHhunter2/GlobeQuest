@@ -1,0 +1,5 @@
+{
+    "python.analysis.extraPaths": [
+        "./Portable Python-3.10.0 x64/App/Python/Lib/site-packages"
+    ]
+}

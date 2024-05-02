@@ -1,0 +1,31 @@
+#tablet{
+    border:1px solid #ccc;
+    margin:10px;
+    cursor:crosshair;
+    margin: 3rem 0;
+}
+
+.draw-container{
+    color: white;
+}
+.gradient{
+    width: auto;
+    padding: 3rem 5rem;
+}
+h1{
+    font-size: 2em;
+}
+.time-left{
+    font-size: 1.5em;
+    font-weight: 300;
+}
+.flex-between-box{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.btns{
+    width: 420px;
+}

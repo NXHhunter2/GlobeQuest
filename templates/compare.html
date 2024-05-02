@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}GeoDraw{% endblock %}
+
+{% block additional_styles %}<link rel="stylesheet" href="{{ url_for( 'static', filename='compare.css', v=1)}}">{% endblock %}
+
+{% block content %}
+    <div class="compare-container gradient">
+        <div class="img-box">
+            <img src="{{ url_for( 'static', filename=path, v=1)}}" class="country-img img"/>
+            <img src="{{ original }}" class="original-img img"/>
+        </div>
+        <h1 class="main-text">Similarity is {{ compared }}%</p>
+        <h1 class="lower-text h1">{{ country }}</h1>
+        <h2 class="lower-text h2">{{ region }}</h1>
+        <a href="#" class="third" id="drawdefine">Play Again</a>
+        <a id="show-hash">Show hash</a>
+        <div class="invisible inv-text">
+            <p>{{ hash1 }}</p>
+            <p>{{ hash2 }}</p>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for( 'static', filename='to_europe.js', v=1)}}"></script>
+<script src="{{ url_for( 'static', filename='compare.js', v=1)}}"></script>
+{% endblock %}
