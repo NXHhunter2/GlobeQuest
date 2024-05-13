@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}GlobeQuest{% endblock %}
+
+{% block additional_styles %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='usermanual/css/all.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='usermanual/de_style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='usermanual/custom.css') }}">
+<style>
+    #content {
+        background-image: none;
+    }
+</style>
+{% endblock %}
+{% block content %}
+
+    <article>
+        <div class="description_on_page">
+            <div class="p h1">
+                <div class="ic">
+                    <h1 style = "font-family: 'Roboto', sans-serif; font-weight: 500; border: 5px solid transparent;">СПРАВКА ПО РЕЖИМУ "ОТГАДЫВАНИЕ"</h1>
+                </div>
+            </div>
+            <div class="p de_026A006CB7">Запущенный раунд режима &quot;Угадывание&quot; (Detecting).</div>
+            <div class="p de_026A006CB7">В данном режиме пользователю необходимо выбрать правильное название страны, которая изображена на экране.</div>
+            <div class="p de_38B3956165"><img  alt="" style="border: solid 0px #000000;  " width="65%" height="65%" class="de_custom_img de_780D01ADE8" src="{{ url_for('static', filename='usermanual/imgs/5.png') }}"/></div>
+            <div class="p de_026A006CB7">1 – Варианты названий стран, из которых нужно выбрать правильное название страны, представленной на экране.</div>
+            <div class="p de_026A006CB7" style = "padding-bottom: 20px;">2 – Изображение страны, чьё название надо отгадать.</div>
+        </div>
+    </article>
+{% endblock %}
+

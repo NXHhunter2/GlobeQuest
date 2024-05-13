@@ -8,33 +8,56 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="{{ url_for( 'static', filename='style.css', v=1)}}">
     {% block additional_styles %}{% endblock %}
-    <title>{% block title %}GeoDraw{% endblock %}</title>
+    <title>{% block title %}GlobeQuest{% endblock %}</title>
     {% endblock %}
 </head>
 <body>
+    <form id="helpForm" method="post" action="/help_redirect">
+        <input type="hidden" name="current_page" id="currentPage">
+    </form>
+    
     <div class="unavailable">
         Sorry your device is not supported :(
     </div>
     <header>
         {% block header %}
             <!-- <img src="//capp.nicepage.com/53cb18063e177f9bcb15d084da0519c2d68d608e/images/default-logo.png" alt="logo" class="logo"> -->
-            <img src="{{ url_for( 'static', filename='logo.png', v=1)}}" alt="logo" class="logo">
+            <img src="{{ url_for( 'static', filename='logo-color.png', v=1)}}" alt="logo" class="logo">
         {% endblock %}
     </header>
     <div id="content">{% block content %}{% endblock %}</div>
 
     <footer id="footer">
         {% block footer %}
-            GeoDraw Inc.
+            GlobeQuest Inc.<br/>
+            <a id = "help_btn">Помощь</a>
         {% endblock %}
     </footer>
     {% block scripts %}
     <script src="{{ url_for( 'static', filename='main.js', v=1)}}"></script>
     {% endblock %}
+    
     <script>
         document.getElementsByClassName('logo')[0].addEventListener('click', ()=>{
             location.href = '/';
-        })
+        });
+        
+        document.getElementById("help_btn").addEventListener("click", (event) => {
+            event.preventDefault();
+            post('/help');
+        });
+
+        document.getElementById('currentPage').value = window.location.pathname;
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'F1') {
+                // Submit the form when F1 is pressed
+                document.getElementById('helpForm').submit();
+            }
+        });
+
+
+
     </script>
 </body>
 </html>

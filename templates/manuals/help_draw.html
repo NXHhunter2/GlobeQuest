@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}GlobeQuest{% endblock %}
+
+{% block additional_styles %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='usermanual/css/all.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='usermanual/de_style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='usermanual/custom.css') }}">
+<style>
+    #content {
+        background-image: none;
+    }
+</style>
+{% endblock %}
+{% block content %}
+
+    <article>
+        <div class="description_on_page">
+            <div class="p h1">
+                <div class="ic">
+                    <h1 style = "font-family: 'Roboto', sans-serif; font-weight: 500; border: 5px solid transparent;">СПРАВКА ПО РЕЖИМУ "РИСОВАНИЕ"</h1>
+                </div>
+            </div>
+            <div class="p de_026A006CB7">Запущенный раунд режима &quot;Рисование&quot; (Drawing).</div>
+            <div class="p de_026A006CB7">В данном окне пользователю необходимо нарисовать границы заданной за определённый промежуток времени.</div>
+            <div class="p de_38B3956165"><img  alt="" style="border: solid 0px #000000;  " width="65%" height="65%" class="de_custom_img de_780D01ADE8" src="{{ url_for('static', filename='usermanual/imgs/3.png') }}"/></div>
+            <div class="p de_026A006CB7">1 – Очистка поля для рисования.</div>
+            <div class="p de_026A006CB7">2 – Досрочное завершение раунда.</div>
+            <div class="p de_026A006CB7">3 – Область рисования.</div>
+            <div class="p de_026A006CB7">4 – Страна, границы которой необходимо нарисовать.</div>
+        </div>
+    </article>
+{% endblock %}
+
