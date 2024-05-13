@@ -21,18 +21,21 @@
 }
 
 header{
-    height: 60px;
+    height: 12%;
     width: 100%;
+    position: absolute;
     overflow: hidden;
     display: flex;
     align-items: center;
     flex-direction: row;
-    padding: 0 2rem;
+    padding: 0 1.5rem;
 }
 .logo {
+    height: auto; 
+    width: 270px; 
     display: flex;
     justify-content: flex-start;
-    margin-left: 3px;
+    margin-left: 0px;
     cursor: pointer;
 }
 
@@ -157,10 +160,73 @@ header{
 }
 
 footer{
+    position: relative;
     background-color: #333333;
     color: white;
-    font-size: 1em;
+    font-size: 1.2em;
     width: 100%;
-    min-height: 150px;
+    /* min-height: 1000px; */
     padding: 2rem;
+}
+
+#help_btn{
+    cursor: pointer;
+    position: absolute;
+    right: 2rem;
+    top: 2rem;
+}
+
+#help_btn:hover{
+    text-decoration: underline;
+}
+
+.full_width_text {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    font-weight: 300;
+    border: 5px solid transparent;
+    font-size: 1.5em;
+    max-width: 500px;
+}
+
+.user_manual_btn {
+    display: flex;
+    order: 1;
+    justify-content: center;
+    text-decoration: none;
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    color: rgba(0, 0, 0, .5);
+    background-color: white;
+    transition: all .5s;
+    cursor: pointer;
+    font-weight: 700;
+    border: solid 3.5px white;
+    mix-blend-mode: hard-light;
+    text-align: center;
+    font-size: 2em;
+    padding-inline: 5px;
+}
+.user_manual_btn:before {
+    content: "";
+    background: linear-gradient(90deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .5));
+    margin-left: -150px;
+    height: 250px;
+    width: 100px;
+    position: absolute;
+    top: -5px;
+    left: -75px;
+    transform: skewX(-45deg);
+  }
+.user_manual_btn:hover {
+    background: transparent;
+    color: #fff;
+    /* transform: skewX(-20deg); */
+  }
+.user_manual_btn:hover:before {
+    left: 460px;
+    transition: .6s ease-in-out;
 }

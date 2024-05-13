@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}GlobeQuest{% endblock %}
+
+{% block additional_styles %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='usermanual/css/all.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='usermanual/de_style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='usermanual/custom.css') }}">
+<style>
+    #content {
+        background-image: none;
+    }
+</style>
+{% endblock %}
+{% block content %}
+
+    <article>
+        <div class="description_on_page">
+            <div class="p h1">
+                <div class="ic">
+                    <h1 style = "font-family: 'Roboto', sans-serif; font-weight: 500; border: 5px solid transparent;">ОПИСАНИЕ ОПЕРАЦИЙ</h1>
+                </div>
+            </div>
+            <div class="p">I. Главное меню.</div>
+            <div class="p">В данном меню пользователю предлагается выбрать режим игры.</div>
+            <div class="p de_38B3956165"><img  alt="" style="border: solid 0px #000000;  " width="65%" height="65%" class="de_custom_img de_780D01ADE8" src="{{ url_for('static', filename='usermanual/imgs/1_.png') }}"/></div>
+            <div class="p">1 – Выбор режима &quot;Рисование&quot; (Drawing). (Рисование – режим, где пользователю необходимо по памяти нарисовать границу определённой страны)</div>
+            <div class="p">2 – Выбор режима &quot;Угадывание&quot; (Detecting). (Угадывание – режим, где пользователю необходимо по контуру определить название страны, которая перед ним находится)</div>
+            <div class="p">&#160;</div>
+            <div class="p">II. Меню настройки режима &quot;Рисование&quot; (Drawing).</div>
+            <div class="p">В данном меню пользователю предлагается настроить режим &quot;Рисование&quot; перед началом игры.</div>
+            <div class="p de_38B3956165"><br /><img  alt="" style="border: solid 0px #000000;  " width="65%" height="65%" class="de_custom_img de_780D01ADE8" src="{{ url_for('static', filename='usermanual/imgs/2.png') }}"/></div>
+            <div class="p de_026A006CB7">1 – Выбор пула попадающихся стран в качестве &quot;Мир&quot; (World) и запуск игры. Во время игры может попасться любая страна, со всего мира.</div>
+            <div class="p de_026A006CB7">2 – Выбор пула попадающихся стран в качестве &quot;Европа&quot; (Europe) и запуск игры. Во время игры может попасться любая европейская страна.</div>
+            <div class="p de_026A006CB7">3 – Настройка времени раунда. Передвигайте ползунок, чтобы настроить длительность раунда.</div>
+            <div class="p de_026A006CB7">&#160;</div>
+            <div class="p de_026A006CB7">III. Запущенный раунд режима &quot;Рисование&quot; (Drawing).</div>
+            <div class="p de_026A006CB7">В данном окне пользователю необходимо нарисовать границы заданной за определённый промежуток времени.</div>
+            <div class="p de_38B3956165"><img  alt="" style="border: solid 0px #000000;  " width="65%" height="65%" class="de_custom_img de_780D01ADE8" src="{{ url_for('static', filename='usermanual/imgs/3.png') }}"/></div>
+            <div class="p de_026A006CB7">1 – Очистка поля для рисования.</div>
+            <div class="p de_026A006CB7">2 – Досрочное завершение раунда.</div>
+            <div class="p de_026A006CB7">3 – Область рисования.</div>
+            <div class="p de_026A006CB7">4 – Страна, границы которой необходимо нарисовать.</div>
+            <div class="p de_026A006CB7">&#160;</div>
+            <div class="p de_026A006CB7">IV. Результаты раунда режима &quot;Рисование&quot; (Drawing).</div>
+            <div class="p de_026A006CB7">На данной странице пользователю предлагается ознакомиться с результатами раунда, а также увидеть эталонное изображение границ.</div>
+            <div class="p de_38B3956165"><img  alt="" style="border: solid 0px #000000;  " width="65%" height="65%" class="de_custom_img de_780D01ADE8" src="{{ url_for('static', filename='usermanual/imgs/4.png') }}"/></div>
+            <div class="p de_026A006CB7">1 – Кнопка перезапуска игры.</div>
+            <div class="p de_026A006CB7">2 – Эталонное изображение границ страны, которую требовалось нарисовать.</div>
+            <div class="p de_026A006CB7">3 – Нарисованное пользователем в текущем раунде изображение границ страны.</div>
+            <div class="p de_026A006CB7">4 – Процент схожести рисунка пользователя с эталонным изображением границ страны, которую необходимо было нарисовать.</div>
+            <div class="p de_026A006CB7">&#160;</div>
+            <div class="p de_026A006CB7">V. Запущенный раунд режима &quot;Угадывание&quot; (Detecting).</div>
+            <div class="p de_026A006CB7">В данном режиме пользователю необходимо выбрать правильное название страны, которая изображена на экране.</div>
+            <div class="p de_38B3956165"><img  alt="" style="border: solid 0px #000000;  " width="65%" height="65%" class="de_custom_img de_780D01ADE8" src="{{ url_for('static', filename='usermanual/imgs/5.png') }}"/></div>
+            <div class="p de_026A006CB7">1 – Варианты названий стран, из которых нужно выбрать правильное название страны, представленной на экране.</div>
+            <div class="p de_026A006CB7" style = "padding-bottom: 20px;">2 – Изображение страны, чьё название надо отгадать.</div>
+        </div>
+    </article>
+{% endblock %}
+

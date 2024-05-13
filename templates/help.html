@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}GlobeQuest{% endblock %}
+
+{% block content %}
+<div class="gradient">
+    <section class="temp first">Помощь</section>
+    <section class="temp full_width_text">GlobeQuest – бесплатная географическая онлайн игра. В игре есть два режима: 
+        Рисование и Угадывание. В режиме рисование надо нарисовать границы стран по памяти, а в режиме угадывание 
+        надо отгадать название страны, которая изображена на экране.
+    </section>
+    <a class="temp user_manual_btn" id="user_manual_redirection">Полная справка</a>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for( 'static', filename='main.js', v=1)}}"></script>
+<script>
+    document.getElementById("user_manual_redirection").addEventListener("click", (event) => {
+        event.preventDefault();
+        post('/usermanual');
+      });
+</script>
+
+{% endblock %}

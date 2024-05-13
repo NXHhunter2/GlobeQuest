@@ -4,6 +4,8 @@ import compare
 import random
 
 app = Flask(__name__)
+app.config['TEMPLATES_AUTO_RELOAD'] = True
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 def chooseCountry(country):
     number1, number2, number3, number4 = 0, 0, 0, 0
@@ -33,7 +35,6 @@ country = [["Russia", "countries/russia.jpg", "Europe / Asia"],
            ["Poland", "countries/poland.png", "Europe"],
            ["United States", "countries/usa.png", "North America"],
            ["Turkey", "countries/turkey.png", "Europe / Asia"],
-           ["Ukraine", "countries/ukraine.png", "Europe"],
            ["Brazil", "countries/brazil.png", "South America"],
            ["Mexico", "countries/mexico.png", "North America"],
            ["Austria", "countries/austria.png", "Europe"],
@@ -49,6 +50,45 @@ country = [["Russia", "countries/russia.jpg", "Europe / Asia"],
            ["Spain", "countries/spain.png", "Europe"],
            ["United Kingdom", "countries/uk.png", "Europe"]]
 
+PAGE_HELP_MAPPING = {
+    '/': '/help_main',
+    '/drawdefine': '/help_drawdefine',
+    '/draw': '/help_draw',
+    '/detect': '/help_detect',
+    '/compare': '/help_compare',
+}
+
+@app.route('/help_redirect', methods=['POST'])
+def help_redirect():
+    current_page = request.form.get('current_page')
+    # Determine the redirect URL based on the current page
+    redirect_url = PAGE_HELP_MAPPING.get(current_page, '/')
+    return redirect(redirect_url)
+
+@app.route('/help_main')
+def help_main():
+    # Logic for rendering the help_main page
+    return render_template('manuals/help_main.html')
+
+@app.route('/help_drawdefine')
+def help_drawdefine():
+    # Logic for rendering the help_main page
+    return render_template('manuals/help_drawdefine.html')
+
+@app.route('/help_draw')
+def help_draw():
+    # Logic for rendering the help_main page
+    return render_template('manuals/help_draw.html')
+
+@app.route('/help_detect')
+def help_detect():
+    # Logic for rendering the help_main page
+    return render_template('manuals/help_detect.html')
+
+@app.route('/help_compare')
+def help_compare():
+    # Logic for rendering the help_main page
+    return render_template('manuals/help_compare.html')
 
 @app.route('/')
 def index():
@@ -111,6 +151,20 @@ def result():
                                path=draw_country[1],
                                region=draw_country[2],
                                original=url)
+    else:
+        return redirect('/')
+
+@app.route('/usermanual', methods=['GET', 'POST'])
+def usermanual():
+    if request.method == "POST":
+        return render_template('manuals/full_help.html')
+    else:
+        return redirect('/')
+
+@app.route('/help', methods=['GET', 'POST'])
+def help():
+    if request.method == "POST":
+        return render_template('help.html')
     else:
         return redirect('/')
 

@@ -39,7 +39,6 @@ function checkLocal(){
 }
 }
 
-
 if(document.getElementById("europe")){
   document.getElementById("europe").addEventListener("click", (event) => {
     event.preventDefault();
@@ -70,3 +69,4 @@ if(document.getElementById("drawdefine")){
     post('/drawdefine', {type: "Drawdefine"});
   });
 }
+
