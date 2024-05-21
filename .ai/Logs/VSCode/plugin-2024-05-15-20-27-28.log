@@ -1,0 +1,17 @@
+[5/15/2024, 8:27:28 PM] info: Logging was started
+[5/15/2024, 8:27:28 PM] info: Start application inspector initialization
+[5/15/2024, 8:27:28 PM] info: Hide developer mode UI
+[5/15/2024, 8:27:28 PM] info: Infrastructure Configurations: {"port":8000,"infrastructureAssemblyFolderPath":"/Library/Application-Inspector-Analyzer","applicationResourcesFolderPath":"/Library/Application-Inspector-Analyzer","scanTargetFolderPath":"/Users/zaharsoldatkin/Projects/GlobeQuest","isDebugging":false,"logLevel":{"q8_1":"Error","r8_1":5,"type":5,"key":"Settings.LogLevel.Error.Text"},"logDir":"/Users/zaharsoldatkin/Projects/GlobeQuest/.ai/Logs/Infrastructure/2024-05-15-20-27-28","applicationLocalDataFolderPath":"/Users/zaharsoldatkin/Projects/GlobeQuest/.ai"}
+[5/15/2024, 8:27:28 PM] info: Start infrastructure initialization
+[5/15/2024, 8:27:29 PM] info: Infrastructure was started
+[5/15/2024, 8:27:31 PM] info: Initialize aie integration isn't initialized
+[5/15/2024, 8:27:31 PM] info: Infrastructure was initialized
+[5/15/2024, 8:27:31 PM] info: Infrastructure Installer was deleted
+[5/15/2024, 8:27:32 PM] info: Clean up logs files was started
+[5/15/2024, 8:27:32 PM] info: Clean up logs files was finished
+[5/15/2024, 8:27:33 PM] info: Start scan command handled
+[5/15/2024, 8:27:41 PM] info: Scan done message handled
+[5/15/2024, 8:27:42 PM] info: Scan was finished with errors. Errors will be output to the output channel.
+[5/15/2024, 8:34:00 PM] info: Start scan command handled
+[5/15/2024, 8:34:07 PM] info: Scan done message handled
+[5/15/2024, 8:34:07 PM] info: Scan was finished with errors. Errors will be output to the output channel.

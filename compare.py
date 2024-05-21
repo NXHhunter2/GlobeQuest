@@ -27,9 +27,19 @@ def CompareHash(hash1, hash2):
     i = 0
     count = 0
     while i < l:
-        if hash1[i] != hash2[i]:
-            count = count + 1
-        i = i + 1
+        if hash1[i] == '0' and hash1[i] != hash2[i]:
+            count += 1
+        i += 1
+    return count
+
+def CalculateBlackPixels(hash1):
+    l = len(hash1)
+    i = 0
+    count = 0
+    while i < l:
+        if hash1[i] == '0':
+            count += 1
+        i += 1
     return count
 
 
@@ -37,8 +47,10 @@ def compare(url, country):
     urllib.request.urlretrieve(url, 'static/countries/original.png')
     hash1 = CalcImageHash("static/" + country)
     hash2 = CalcImageHash('static/countries/original.png')
+    blackPixelsCount = CalculateBlackPixels(hash1)
+    matchingBlackPixels = CompareHash(hash1, hash2)
     if "1" in hash2:
-        compared = floor((64-CompareHash(hash1, hash2)) * 1.5625)
+        compared = floor((blackPixelsCount - CompareHash(hash1, hash2)) * (100 / blackPixelsCount))
     else:
         compared = 0
     return hash1, hash2, compared

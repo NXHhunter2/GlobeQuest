@@ -1,0 +1,11 @@
+[5/15/2024, 8:20:52 PM] info: Logging was started
+[5/15/2024, 8:20:52 PM] info: Start application inspector initialization
+[5/15/2024, 8:20:52 PM] info: Hide developer mode UI
+[5/15/2024, 8:20:52 PM] info: Infrastructure Configurations: {"port":8000,"infrastructureAssemblyFolderPath":"/Library/Application-Inspector-Analyzer","applicationResourcesFolderPath":"/Library/Application-Inspector-Analyzer","scanTargetFolderPath":"/Users/zaharsoldatkin/Projects/GlobeQuest","isDebugging":false,"logLevel":{"q8_1":"Error","r8_1":5,"type":5,"key":"Settings.LogLevel.Error.Text"},"logDir":"/Users/zaharsoldatkin/Projects/GlobeQuest/.ai/Logs/Infrastructure/2024-05-15-20-20-52","applicationLocalDataFolderPath":"/Users/zaharsoldatkin/Projects/GlobeQuest/.ai"}
+[5/15/2024, 8:20:52 PM] info: Start infrastructure initialization
+[5/15/2024, 8:20:54 PM] info: Infrastructure was started
+[5/15/2024, 8:20:56 PM] info: Initialize aie integration isn't initialized
+[5/15/2024, 8:20:56 PM] info: Infrastructure was initialized
+[5/15/2024, 8:20:56 PM] info: Infrastructure Installer was deleted
+[5/15/2024, 8:20:57 PM] info: Clean up logs files was started
+[5/15/2024, 8:20:57 PM] info: Clean up logs files was finished

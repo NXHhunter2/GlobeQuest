@@ -1,0 +1,13 @@
+[5/15/2024, 8:14:17 PM] info: Handled new configurationAieIntegrationServerUrl: 
+[5/15/2024, 8:17:46 PM] info: Logging was started
+[5/15/2024, 8:17:46 PM] info: Start application inspector initialization
+[5/15/2024, 8:17:46 PM] info: Hide developer mode UI
+[5/15/2024, 8:17:46 PM] info: Infrastructure Configurations: {"port":8000,"infrastructureAssemblyFolderPath":"/Library/Application-Inspector-Analyzer","applicationResourcesFolderPath":"/Library/Application-Inspector-Analyzer","scanTargetFolderPath":"/Users/zaharsoldatkin/Projects/GlobeQuest","isDebugging":false,"logLevel":{"q8_1":"Error","r8_1":5,"type":5,"key":"Settings.LogLevel.Error.Text"},"logDir":"/Users/zaharsoldatkin/Projects/GlobeQuest/.ai/Logs/Infrastructure/2024-05-15-20-17-46","applicationLocalDataFolderPath":"/Users/zaharsoldatkin/Projects/GlobeQuest/.ai"}
+[5/15/2024, 8:17:46 PM] info: Start infrastructure initialization
+[5/15/2024, 8:17:52 PM] info: Infrastructure was started
+[5/15/2024, 8:17:59 PM] info: Initialize aie integration isn't initialized
+[5/15/2024, 8:17:59 PM] info: Infrastructure was initialized
+[5/15/2024, 8:17:59 PM] info: Infrastructure Installer was deleted
+[5/15/2024, 8:18:00 PM] info: Clean up logs files was started
+[5/15/2024, 8:18:00 PM] info: Clean up logs files was finished
+[5/15/2024, 8:18:03 PM] info: Project was created. Id: fac58e65-037f-40ce-9588-fa2585ca25da

@@ -1,0 +1,6 @@
+{"code":"EACCES","errno":-13,"level":"error","path":"/Library/Application-Inspector-Analyzer","syscall":"mkdir"}
+{"level":"error","message":"Light infrastructure start was failed"}
+[5/15/2024, 6:44:46 PM] info: Logging was started
+[5/15/2024, 6:44:46 PM] info: Start application inspector initialization
+[5/15/2024, 6:44:46 PM] info: Hide developer mode UI
+[5/15/2024, 6:44:46 PM] info: Minimum required infrastructure version not found
