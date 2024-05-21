@@ -1,0 +1,74 @@
+20:27:40.134  ERROR  @JsaNetProcessor: Critical error "CoreNotFound"(null) was received.
+20:27:40.141  ERROR  Scanning by JsaNet was failed.
+––– details ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+
+System.Exception: CoreNotFound
+––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+20:27:40.153  ERROR  Critical error of starting JsaNetProcessor. .
+20:27:40.154  ERROR  Critical core error start scanning.
+––– details ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+
+System.OperationCanceledException: Critical error of start scanning.
+   at Infrastructure.Services.ScanService.InnerRunAsync(ScanStartSettings startSettings)
+––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+20:27:40.230  ERROR  Error updating scanning environment states.
+––– details ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at Repository.SqLite.Implementations.VfsRepositoryImpl.DeleteVfsAsync(Connection connection, Guid scanResultId, CancellationToken cancellationToken)
+   at Repository.SqLite.Implementations.VfsRepositoryImpl.DeleteVfsAsync(Connection connection, Guid scanResultId, CancellationToken cancellationToken)
+   at Repository.SqLite.Implementations.VfsRepositoryImpl.UpdateVfsAsync(Connection connection, Vfs vfs, CancellationToken cancellationToken)
+   at Repository.SqLite.Implementations.VfsRepositoryImpl.UpdateVfsAsync(Connection connection, Vfs vfs, CancellationToken cancellationToken)
+   at Repository.SqLite.SqLiteBaseRepository.ConnectionResolverAsync(Func`2 what, Connection inputConnection)
+   at Repository.SqLite.SqLiteProjectRepository.UpsertVFS(Vfs vfs)
+   at Infrastructure.Services.ScanService.InnerRunAsync(ScanStartSettings startSettings)
+––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+20:27:40.787  ERROR  Terminate scanning...
+––– details ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+
+System.OperationCanceledException: Critical error of start scanning.
+   at Infrastructure.Services.ScanService.InnerRunAsync(ScanStartSettings startSettings)
+––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+20:27:40.808  ERROR  Scanning was failed.
+––– details ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+
+System.OperationCanceledException: Critical error of start scanning.
+   at Infrastructure.Services.ScanService.InnerRunAsync(ScanStartSettings startSettings)
+––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+20:34:05.161  ERROR  @JsaNetProcessor: Critical error "CoreNotFound"(null) was received.
+20:34:05.163  ERROR  Scanning by JsaNet was failed.
+––– details ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+
+System.Exception: CoreNotFound
+––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+20:34:05.166  ERROR  Critical error of starting JsaNetProcessor. .
+20:34:05.166  ERROR  Critical core error start scanning.
+––– details ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+
+System.OperationCanceledException: Critical error of start scanning.
+   at Infrastructure.Services.ScanService.InnerRunAsync(ScanStartSettings startSettings)
+––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+20:34:05.176  ERROR  Error updating scanning environment states.
+––– details ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at Repository.SqLite.Implementations.VfsRepositoryImpl.DeleteVfsAsync(Connection connection, Guid scanResultId, CancellationToken cancellationToken)
+   at Repository.SqLite.Implementations.VfsRepositoryImpl.DeleteVfsAsync(Connection connection, Guid scanResultId, CancellationToken cancellationToken)
+   at Repository.SqLite.Implementations.VfsRepositoryImpl.UpdateVfsAsync(Connection connection, Vfs vfs, CancellationToken cancellationToken)
+   at Repository.SqLite.Implementations.VfsRepositoryImpl.UpdateVfsAsync(Connection connection, Vfs vfs, CancellationToken cancellationToken)
+   at Repository.SqLite.SqLiteBaseRepository.ConnectionResolverAsync(Func`2 what, Connection inputConnection)
+   at Repository.SqLite.SqLiteProjectRepository.UpsertVFS(Vfs vfs)
+   at Infrastructure.Services.ScanService.InnerRunAsync(ScanStartSettings startSettings)
+––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+20:34:05.708  ERROR  Terminate scanning...
+––– details ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+
+System.OperationCanceledException: Critical error of start scanning.
+   at Infrastructure.Services.ScanService.InnerRunAsync(ScanStartSettings startSettings)
+––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+20:34:05.712  ERROR  Scanning was failed.
+––– details ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+
+System.OperationCanceledException: Critical error of start scanning.
+   at Infrastructure.Services.ScanService.InnerRunAsync(ScanStartSettings startSettings)
+––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
