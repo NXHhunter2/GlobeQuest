@@ -151,7 +151,8 @@ header{
     display: flex;
     align-items: center; 
     justify-content: center; 
-    min-height: 980px;
+    height: 100vh;
+    width: 100vw;
     background-color: #fff;
     background-image: url("background.jpg");
     background-repeat: no-repeat;
