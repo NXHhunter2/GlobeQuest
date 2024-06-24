@@ -152,7 +152,6 @@ header{
     align-items: center; 
     justify-content: center; 
     height: 100vh;
-    width: 100vw;
     background-color: #fff;
     background-image: url("background.jpg");
     background-repeat: no-repeat;
