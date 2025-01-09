@@ -23,6 +23,13 @@
         {% block header %}
             <!-- <img src="//capp.nicepage.com/53cb18063e177f9bcb15d084da0519c2d68d608e/images/default-logo.png" alt="logo" class="logo"> -->
             <img src="{{ url_for( 'static', filename='logo-color.png', v=1)}}" alt="logo" class="logo">
+            {% if show_logout %}
+            {% if logged_in_username %}
+            <a id = 'logged_in_username' class="nav-link" href = "/logout">{{ logged_in_username }}</a>
+            {% else %}
+            <a class="nav-link" href="/login">Login</a>
+            {% endif %}
+            {% endif %}
         {% endblock %}
     </header>
     <div id="content">{% block content %}{% endblock %}</div>
@@ -30,7 +37,7 @@
     <footer id="footer">
         {% block footer %}
             GlobeQuest Inc.<br/>
-            <a id = "help_btn">Помощь</a>
+            <a class = "" id = "help_btn">Помощь</a>
         {% endblock %}
     </footer>
     {% block scripts %}

@@ -230,3 +230,11 @@ footer{
     left: 460px;
     transition: .6s ease-in-out;
 }
+
+.nav-link {
+    position: absolute;
+    right: 1em;
+    color: black;
+    font-size: 1.5em;
+
+}
