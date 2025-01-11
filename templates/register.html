@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}GlobeQuest{% endblock %}
+
+{% block additional_styles %}<link rel="stylesheet" href="{{ url_for( 'static', filename='login+register.css', v=1)}}">{% endblock %}
+
+{% block content %}
+<div class="gradient">
+    <a class = "temp first login_label">Register</a>
+    <form method = "POST">
+        {{ form.hidden_tag() }}
+        {{ form.username.label(class = "contents label form-label") }}
+        {{ form.username(class = "contents input form-control") }}
+        <br/>
+        {{ form.email.label(class = "contents label form-label") }}
+        {{ form.email(class = "contents input form-control") }}
+        <br/>
+        {{ form.password.label(class = "contents label form-label") }}
+        {{ form.password(class = "contents input form-control") }}
+        <br/>
+        {{ form.submit(class = "contents temp login_button btn-secondary") }}
+    </form>
+    <a id = "login_button">Already have an account? Log in!</a>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for( 'static', filename='redirections.js', v=1)}}"></script>
+{% endblock %}
