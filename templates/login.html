@@ -2,9 +2,10 @@
 
 {% block title %}GlobeQuest{% endblock %}
 
-{% block additional_styles %}<link rel="stylesheet" href="{{ url_for( 'static', filename='login.css', v=1)}}">{% endblock %}
+{% block additional_styles %}<link rel="stylesheet" href="{{ url_for( 'static', filename='login+register.css', v=1)}}">{% endblock %}
 
 {% block content %}
+
 <div class="gradient">
     <a class = "temp first login_label">Login</a>
     <form method = "POST">
@@ -17,8 +18,9 @@
         <br/>
         {{ form.submit(class = "contents temp login_button btn-secondary") }}
     </form>
+    <a id = "register_button">Don't have an account yet? Register!</a>
 </div>
 {% endblock %}
 {% block scripts %}
-<script src="{{ url_for( 'static', filename='main.js', v=1)}}"></script>
+<script src="{{ url_for( 'static', filename='redirections.js', v=1)}}"></script>
 {% endblock %}

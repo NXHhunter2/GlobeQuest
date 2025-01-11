@@ -17,6 +17,7 @@ function post(path, params, method='post') {
     document.body.appendChild(form);
     form.submit();
 }
+
 function checkLocal(){
   switch(document.getElementById("time-range").value){
     case "0": 
@@ -55,7 +56,6 @@ document.getElementById("world").addEventListener("click", (event) => {
 });
 }
 
-
 if(document.getElementById("detect")){
 document.getElementById("detect").addEventListener("click", (event) => {
   event.preventDefault();
@@ -69,4 +69,3 @@ if(document.getElementById("drawdefine")){
     post('/drawdefine', {type: "Drawdefine"});
   });
 }
-

@@ -15,13 +15,16 @@
     <form id="helpForm" method="post" action="/help_redirect">
         <input type="hidden" name="current_page" id="currentPage">
     </form>
+
+    <div class="notify">
+        <span id="notifyText"></span>
+    </div>
     
     <div class="unavailable">
         Sorry your device is not supported :(
     </div>
     <header>
         {% block header %}
-            <!-- <img src="//capp.nicepage.com/53cb18063e177f9bcb15d084da0519c2d68d608e/images/default-logo.png" alt="logo" class="logo"> -->
             <img src="{{ url_for( 'static', filename='logo-color.png', v=1)}}" alt="logo" class="logo">
             {% if show_logout %}
             {% if logged_in_username %}
@@ -58,12 +61,27 @@
 
         document.addEventListener('keydown', function(event) {
             if (event.key === 'F1') {
-                // Submit the form when F1 is pressed
                 document.getElementById('helpForm').submit();
             }
         });
 
+        const flashMessages = JSON.parse('{{ get_flashed_messages() | tojson | safe }}');
 
+    if (flashMessages.length) {
+        const notifyElement = document.querySelector(".notify");
+        const notifyTextElement = document.getElementById("notifyText");
+
+        flashMessages.forEach((message, index) => {
+            setTimeout(() => {
+                notifyTextElement.textContent = message;
+                notifyElement.classList.add("active");
+
+                setTimeout(() => {
+                    notifyElement.classList.remove("active");
+                }, 2000);
+            }, index * 2500);
+        });
+    }
 
     </script>
 </body>

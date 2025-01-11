@@ -2,8 +2,8 @@ from flask import Flask, flash, request, render_template, session, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField
-from wtforms.validators import DataRequired
+from wtforms import StringField, SubmitField, PasswordField, EmailField
+from wtforms.validators import DataRequired, Email, Length
 import compare
 import random
 import psycopg2
@@ -26,27 +26,59 @@ def load_user(user_id):
     return Users.query.get(int(user_id))
 
 class LoginForm(FlaskForm):
-    username = StringField("Username", validators=[DataRequired()])
-    password = PasswordField("Password", validators=[DataRequired()])
+    username = StringField("Username", validators=[DataRequired()], render_kw={"autocomplete": "off"})
+    password = PasswordField("Password", validators=[DataRequired()], render_kw={"autocomplete": "off"})
+    submit = SubmitField("Submit")
+
+class RegisterForm(FlaskForm):
+    username = StringField("Username", validators=[DataRequired(), Length(min = 4, max = 20)], render_kw={"autocomplete": "off"})
+    email = EmailField("Email", validators=[DataRequired(), Email()], render_kw={"autocomplete": "off"})
+    password = PasswordField("Password", validators=[DataRequired()], render_kw={"autocomplete": "off"})
     submit = SubmitField("Submit")
 
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
-    name = None
     form = LoginForm()
     if form.validate_on_submit():
         user = Users.query.filter_by(user_name = form.username.data).first()
         if user:
             if user.user_password == form.password.data:
                 login_user(user)
-                name = user.user_password
                 flash("Logged in successfully!")
                 return redirect('/')
             else:
-                flash("Invalid password!")
+                flash("Invalid username or password!")
         else:
-            flash("Invalid username!")
+            flash("Invalid username or password!")
     return render_template('login.html', form = form, show_logout = False)
+
+@app.route('/register', methods = ['GET', 'POST'])
+def register():
+    form = RegisterForm()
+    if form.validate_on_submit():
+        user_email_check = Users.query.filter_by(user_email = form.email.data).first()
+        user_username_check = Users.query.filter_by(user_name = form.username.data).first()
+        if (user_email_check, user_username_check) == (None, None):
+            user = Users(user_name=form.username.data, user_password=form.password.data, user_email=form.email.data)
+            db.session.add(user)
+            db.session.commit()
+            flash("Registration successful!")
+            return redirect('/login')
+        elif user_email_check is not None and user_username_check is None:
+            flash("The email you entered is already in use!")
+        elif user_username_check is not None and user_email_check is None:
+            flash("The username you entered is already in use!")
+        else:
+            flash("The email and username you entered are already in use!")
+    else:
+        if 'email' in form.errors:
+            for error in form.errors['email']:
+                if form.email.data:
+                    flash(error)
+
+
+
+    return render_template('register.html', form = form, show_logout = False)
 
 @app.route('/logout', methods = ['GET', 'POST'])
 @login_required

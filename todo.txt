@@ -1,0 +1,6 @@
+1. Store a password's hash instead of the password itself
+2. Work out the flash notification 
+3. Build the userpage 
+4. 'Drawing' mode scoreboard – the hightest similarity percentage
+5. 'Detecting' mode scoreboard – hightest streak (correct answers in a row)
+...
