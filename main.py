@@ -1,20 +1,24 @@
 from flask import Flask, flash, request, render_template, session, redirect
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.sql import func, desc
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, EmailField
 from wtforms.validators import DataRequired, Email, Length
+from flask_migrate import Migrate
 import compare
 import random
 import psycopg2
 
 app = Flask(__name__)
+app.secret_key = "ThOD4fSYjEDhma9YgIq33NIcgSJhqxDA4hHTPqlDzXY"
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:020Kruzer020@localhost/GlobeQuest'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 #Flask_Login stuff
 login_manager = LoginManager()
@@ -44,12 +48,12 @@ def login():
         if user:
             if user.user_password == form.password.data:
                 login_user(user)
-                flash("Logged in successfully!")
+                flash("Logged in successfully.")
                 return redirect('/')
             else:
-                flash("Invalid username or password!")
+                flash("Invalid username or password.")
         else:
-            flash("Invalid username or password!")
+            flash("Invalid username or password.")
     return render_template('login.html', form = form, show_logout = False)
 
 @app.route('/register', methods = ['GET', 'POST'])
@@ -62,14 +66,14 @@ def register():
             user = Users(user_name=form.username.data, user_password=form.password.data, user_email=form.email.data)
             db.session.add(user)
             db.session.commit()
-            flash("Registration successful!")
+            flash("Registration successful.")
             return redirect('/login')
         elif user_email_check is not None and user_username_check is None:
-            flash("The email you entered is already in use!")
+            flash("The email you entered is already in use.")
         elif user_username_check is not None and user_email_check is None:
-            flash("The username you entered is already in use!")
+            flash("The username you entered is already in use.")
         else:
-            flash("The email and username you entered are already in use!")
+            flash("The email and username you entered are already in use.")
     else:
         if 'email' in form.errors:
             for error in form.errors['email']:
@@ -84,7 +88,7 @@ def register():
 @login_required
 def logout():
     logout_user()
-    flash("Logged out successfully!")
+    flash("Logged out successfully.")
     return redirect('/login')
 
 class Users(db.Model, UserMixin):
@@ -94,6 +98,8 @@ class Users(db.Model, UserMixin):
     user_name = db.Column(db.String, unique = True, nullable = False)
     user_password = db.Column(db.String, nullable = False)
     user_email = db.Column(db.String, unique = True, nullable = False)
+
+    scores = db.relationship('Scores', back_populates='user', cascade="all, delete-orphan")
 
     def __init__(self, user_name, user_password, user_email):
         self.user_name = user_name
@@ -105,11 +111,21 @@ class Users(db.Model, UserMixin):
     
     def get_id(self):
         return str(self.user_id)
+    
+class Scores(db.Model):
+    __tablename__ = 'scores'
 
-# with app.app_context():
-#     users = Users.query.all()
-#     for user in users:
-#         print(user.user_id, user.user_name, user.user_email)
+    id = db.Column(db.BigInteger, primary_key = True)
+    user_id = db.Column(db.BigInteger, db.ForeignKey('users.user_id'), nullable = False)
+    gamemode_id = db.Column(db.BigInteger, nullable = False)
+    score = db.Column(db.Float, nullable = False)
+
+    user = db.relationship('Users', back_populates='scores')
+
+    def __init__(self, user_id, gamemode_id, score):
+        self.user_id = user_id
+        self.gamemode_id = gamemode_id
+        self.score = score
 
 
 def chooseCountry(country):
@@ -178,32 +194,45 @@ def help_redirect():
 
 @app.route('/help_main')
 def help_main():
-    # Logic for rendering the help_main page
     return render_template('manuals/help_main.html')
 
 @app.route('/help_drawdefine')
 def help_drawdefine():
-    # Logic for rendering the help_main page
     return render_template('manuals/help_drawdefine.html')
 
 @app.route('/help_draw')
 def help_draw():
-    # Logic for rendering the help_main page
     return render_template('manuals/help_draw.html')
 
 @app.route('/help_detect')
 def help_detect():
-    # Logic for rendering the help_main page
     return render_template('manuals/help_detect.html')
 
 @app.route('/help_compare')
 def help_compare():
-    # Logic for rendering the help_main page
     return render_template('manuals/help_compare.html')
 
 @app.route('/')
 def index():
     return render_template('index.html', show_logout = True)
+
+@app.route('/drawdefine', methods=['GET', 'POST'])
+@login_required
+def drawdefine():
+    if request.method != "POST":
+        return redirect('/')
+    region = request.form.get('type')
+    if region != "Drawdefine":
+        return redirect('/')
+    drawing_gamemode_scores = db.session.query (
+        Users.user_name,
+        func.max(Scores.score).label('max_score'),
+        func.count(Scores.score)
+    )   .join(Scores, Users.user_id == Scores.user_id)\
+        .filter(Scores.gamemode_id == 1)\
+        .group_by(Users.user_name)\
+        .order_by(desc('max_score')).all()
+    return render_template('drawdefine.html', drawing_gamemode_scores = drawing_gamemode_scores, show_logout = True)
 
 @app.route('/draw', methods=['GET', 'POST'])
 @login_required
@@ -223,15 +252,29 @@ def draw():
     session['draw_country'] = draw_country
     return render_template('draw.html', country=draw_country[0], show_logout = True)
 
-@app.route('/drawdefine', methods=['GET', 'POST'])
+@app.route('/compare', methods=['GET', 'POST'])
 @login_required
-def drawdefine():
-    if request.method != "POST":
-        return redirect('/')
-    region = request.form.get('type')
-    if region != "Drawdefine":
-        return redirect('/')
-    return render_template('drawdefine.html', show_logout = True)
+def result():
+    if request.method == "POST" and session.get('draw_country', None):
+        url = request.form.get('url')
+        draw_country = session.get('draw_country', None)
+        hash1, hash2, compared = compare.compare(url, draw_country[1])
+        # gamemode_id = 1 –––> 'Drawing' gamemode
+        # gamemode_id = 2 –––> 'Detecting' gamemode
+        score = Scores(user_id=current_user.user_id, gamemode_id=1, score=compared)
+        db.session.add(score)
+        db.session.commit()
+        return render_template('compare.html',
+                               hash1=hash1,
+                               hash2=hash2,
+                               compared=compared,
+                               country=draw_country[0],
+                               path=draw_country[1],
+                               region=draw_country[2],
+                               original=url,
+                               show_logout = True)
+    else:
+        return redirect('/', show_logout = True)
 
 @app.route('/detect', methods=['GET', 'POST'])
 @login_required
@@ -251,24 +294,6 @@ def detect():
                            mainCountry=country[mainCountry][1],
                            mainName=country[mainCountry][0], show_logout = True)
 
-@app.route('/compare', methods=['GET', 'POST'])
-@login_required
-def result():
-    if request.method == "POST" and session.get('draw_country', None):
-        url = request.form.get('url')
-        draw_country = session.get('draw_country', None)
-        hash1, hash2, compared = compare.compare(url, draw_country[1])
-        return render_template('compare.html',
-                               hash1=hash1,
-                               hash2=hash2,
-                               compared=compared,
-                               country=draw_country[0],
-                               path=draw_country[1],
-                               region=draw_country[2],
-                               original=url, show_logout = True)
-    else:
-        return redirect('/', show_logout = True)
-
 @app.route('/usermanual', methods=['GET', 'POST'])
 def usermanual():
     if request.method == "POST":
@@ -284,5 +309,5 @@ def help():
         return redirect('/')
 
 if __name__ == '__main__':
-    app.secret_key = 'ThOD4fSYjEDhma9YgIq33NIcgSJhqxDA4hHTPqlDzXY'
     app.run()
+    app.secret_key = 'ThOD4fSYjEDhma9YgIq33NIcgSJhqxDA4hHTPqlDzXY'

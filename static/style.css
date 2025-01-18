@@ -7,6 +7,7 @@
     font-family: 'Roboto', sans-serif;
 }
 
+
 @media screen and (max-width: 899px){
     .unavailable{
         display: block !important;
@@ -57,6 +58,14 @@ header{
     align-content: space-around;
     padding: 3rem;
     box-shadow: -2px 1px 16px 20px rgb(255 255 255 / 80%);
+}
+
+.gradient-text {
+    background: linear-gradient(to right, #ee5f00, #6432e5);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
 }
 
 .temp {
@@ -274,4 +283,136 @@ footer{
 .notify span {
     display: block;
     margin-top: 15px;
+}
+
+.leaderboard_background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    visibility: hidden;
+    opacity: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    cursor: pointer;
+}
+
+.leaderboard_background.active {
+    visibility: visible;
+    opacity: 1;
+}
+
+.leaderboard {
+    z-index: 2;
+    position: absolute;
+    visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;    
+    background-color: white;
+    color: black;
+    height: 50%;
+    min-height: 500px;
+    min-width: 800px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transform: scale(0.6);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s 0.3s;
+    padding-bottom: 10px;
+}
+
+.leaderboard.active {
+    visibility: visible;
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    font-size: 1.5em;
+}
+
+tbody {
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: 200;
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 5px;
+}
+
+.leaderboard_caption {
+    display: flex;
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+}
+
+.leaderboard_closing_hint {
+    display: flex;
+    font-size: 1em;
+    font-weight: 400;
+    text-align: center;
+    padding-top: 10px;
+    font-style: italic;
+}
+
+.dyn-height {
+    min-width: 90%;
+    height: 90%;
+    overflow-y: auto;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+  
+/* Track */
+::-webkit-scrollbar-track {
+background: transparent; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+background: #555; 
+}
+
+.current_user_row {
+    border: 2px solid rgb(221, 73, 41);
+    border-radius: 5px;
+}
+
+.first_row {
+    color: gold;
+    font-weight: 600;
+}
+
+.second_row {
+    color: silver;
+    font-weight: 600;
+}
+
+.third_row {
+    color: #CD7F32;
+    font-weight: 600;
 }

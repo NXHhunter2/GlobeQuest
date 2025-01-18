@@ -50,7 +50,7 @@ def compare(url, country):
     blackPixelsCount = CalculateBlackPixels(hash1)
     matchingBlackPixels = CompareHash(hash1, hash2)
     if "1" in hash2:
-        compared = floor((blackPixelsCount - CompareHash(hash1, hash2)) * (100 / blackPixelsCount))
+        compared = round((blackPixelsCount - CompareHash(hash1, hash2)) * (100 / blackPixelsCount), 2)
     else:
         compared = 0
     return hash1, hash2, compared

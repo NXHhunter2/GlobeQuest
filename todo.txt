@@ -1,6 +1,8 @@
 1. Store a password's hash instead of the password itself
-2. Work out the flash notification 
+2. Work out the flash notification ––––> Done!
 3. Build the userpage 
-4. 'Drawing' mode scoreboard – the hightest similarity percentage
+4. 'Drawing' mode scoreboard – the hightest similarity percentage + total games played ––––> Done!
+    4a. 'Drawing' mode scoreboard – color your score on the scoreboard ––––> Done!
+    4b. 'Drawing' mode scoreboard – show the amount of games ––––> Done!
 5. 'Detecting' mode scoreboard – hightest streak (correct answers in a row)
 ...
