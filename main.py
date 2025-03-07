@@ -285,6 +285,12 @@ def detect():
     if region != "Detect":
         return redirect('/')
     
+
+    session['in_detect_page'] = True
+
+    if 'streak_count' not in session:
+        session['streak_count'] = 0
+
     number1, number2, number3, number4, mainCountry = chooseCountry(country)
     return render_template('detect.html',
                            number1=country[number1][0], 
@@ -292,7 +298,33 @@ def detect():
                            number3=country[number3][0], 
                            number4=country[number4][0], 
                            mainCountry=country[mainCountry][1],
-                           mainName=country[mainCountry][0], show_logout = True)
+                           mainName=country[mainCountry][0],
+                           streak_count=session['streak_count'], show_logout = True)
+
+@app.route('/update_streak', methods=['POST'])
+def update_streak():
+    if request.method != "POST":
+        return redirect('/')
+    
+    data = request.get_json()
+
+    if data.get('correct'):
+        session['streak_count'] += 1
+    else:
+        session['streak_count'] = 0
+
+    session.modified = True
+    return {'streak_count': session['streak_count']}
+
+@app.before_request
+def handle_before_request():
+    if 'in_detect_page' in session and session['in_detect_page']:
+        if not request.path.startswith('/static/') and request.path not in ['/detect', '/update_streak']:
+            print("Reloading")
+            session['streak_count'] = 0
+            session['in_detect_page'] = False
+            session.modified = True
+
 
 @app.route('/usermanual', methods=['GET', 'POST'])
 def usermanual():

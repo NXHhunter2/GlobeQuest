@@ -5,4 +5,16 @@
     4a. 'Drawing' mode scoreboard – color your score on the scoreboard ––––> Done!
     4b. 'Drawing' mode scoreboard – show the amount of games ––––> Done!
 5. 'Detecting' mode scoreboard – hightest streak (correct answers in a row)
+    5a. 'Detecting' mode – make a strting page (make '/detect' page inaccesible trhough a GET request)
+    5b. 'Detecting' mode – add timer for the round
+6. Create DB for images' URL
+7. Add new guessing countries' flags game mode
 ...
+--------------------
+Work report should consist of:
+1. UML Use Case Diagram == functional requirements desc. (2nd Class)
+2. UML Activity Diagram (3rd class) (Business processes diagram) AS IS TO BE
+3. UML Class Diagram ??? Logical Model – during engineering
+4. UML Component Diagram ??? System architecture
+5. UML Deployment Diagram ??? 
+6. UML Sequence Diagram ???

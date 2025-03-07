@@ -23,6 +23,7 @@
                 <a class="temp third" id="number3">{{ number3 }}</a>
                 <a class="temp third button-2" id="number4">{{ number4 }}</a>
             </div>
+            <a class="temp second">Current streak: {{ streak_count }}</a>
         </div>
         <div class="invisible inv-text">
             <h1 id="response" class="lower-text h1"></h1>
@@ -43,19 +44,24 @@
     }
 
     const show = (element, response) => {
-        if(clicked) return 0;
+        if(clicked) return;
+        clicked = true;
 
-        clicked = true
-        if(response){
-            document.getElementById('response').innerHTML = "Correct!!!"
-        }
-        else{
-            document.getElementById('response').innerHTML = "Wrong -_-"
-        }
+        document.getElementById('response').innerHTML = response ? "Correct!!!" : "Wrong -_-";
         document.getElementById('answer').innerHTML = "This is {{ mainName }}"
         element.classList.remove("invisible");
         document.getElementsByClassName('ob')[0].classList.add("invisible");
-    }
+
+        fetch('/update_streak', {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ correct: response })
+        })
+        .then(res => res.json())
+        .then(data => {
+            document.querySelector('.temp.second').innerText = "Current streak: " + data.streak_count;
+        });
+    };
 
     let element = document.getElementsByClassName('invisible')[0];
     let number1 = document.getElementById("number1")
@@ -95,6 +101,7 @@
             show(element, 0)
         }
     });
+    
 </script>
 <script src="{{ url_for( 'static', filename='detect.js', v=1)}}"></script>
 {% endblock %}
