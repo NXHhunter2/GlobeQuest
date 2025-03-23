@@ -4,9 +4,9 @@
 4. 'Drawing' mode scoreboard – the hightest similarity percentage + total games played ––––> Done!
     4a. 'Drawing' mode scoreboard – color your score on the scoreboard ––––> Done!
     4b. 'Drawing' mode scoreboard – show the amount of games ––––> Done!
-5. 'Detecting' mode scoreboard – hightest streak (correct answers in a row)
-    5a. 'Detecting' mode – make a strting page (make '/detect' page inaccesible trhough a GET request)
-    5b. 'Detecting' mode – add timer for the round
+5. 'Detecting' mode scoreboard – hightest streak (correct answers in a row) ––––> Done!
+    5a. 'Detecting' mode – make a strting page (make '/detect' page inaccesible trhough a GET request) ––––> Done!
+    5b. 'Detecting' mode – add timer for the round ––––> Done!
 6. Create DB for images' URL
 7. Add new guessing countries' flags game mode
 ...

@@ -59,9 +59,16 @@ document.getElementById("world").addEventListener("click", (event) => {
 if(document.getElementById("detect")){
 document.getElementById("detect").addEventListener("click", (event) => {
   event.preventDefault();
-  post('/detect', {type: "Detect"});
+  post('/detectdefine');
 });
 }
+
+if(document.getElementById("start_detecting")){
+  document.getElementById("start_detecting").addEventListener("click", (event) => {
+    event.preventDefault();
+    post('/detect', {type: "Detect"});
+  });
+  }
 
 if(document.getElementById("drawdefine")){
   document.getElementById("drawdefine").addEventListener("click", (event) => {

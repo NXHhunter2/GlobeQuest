@@ -2,43 +2,40 @@
 
 {% block title %}GlobeQuest{% endblock %}
 
-{% block additional_styles %}
+<!-- {% block additional_styles %}
 <link rel="stylesheet" href="{{ url_for( 'static', filename='drawdefine.css', v=1)}}">
-{% endblock %}
+{% endblock %} -->
 
 {% block content %}
 <div class="gradient">
-    <section class="temp first">Drawing</section>
-    <section class="temp second">You'll have to draw outlines of different countries and then algorithm will compare these drawings to the real outlines.</section>
-    <input type="range" step="1" max="2" id="time-range" value="2">
-    <label for="time-range" class="temp second time-output">30s</label>    
+    <section class="temp first">Detecting</section>
+    <section class="temp second">You'll have three seconds to identify the country displayed to you.</section>
     <div class="btns">
-        <a class="temp third" id="world">World</a>
+        <a class="temp third" id="start_detecting">Start</a>
         <div class="temp second inter">or</div>
-        <a class="temp third button-2" id="europe">Europe</a>
+        <div class="temp third leaderboard_button" id ="leaderboard_button">Leaderboard</div>   
     </div>
-    <div class="temp third leaderboard_button" id ="leaderboard_button">Leaderboard</div>
 </div>
 
 <div class="leaderboard_background" id = "leaderboard_background"></div>
 <div class = "leaderboard" id = "leaderboard">
-    <a class="leaderboard_caption gradient-text">Drawing leaderboard</a>
+    <a class="leaderboard_caption gradient-text">Detecting leaderboard</a>
     <div class = "dyn-height row_align">
         <table class = "content">
             <thead>
                 <tr>
                     <th>Rank</th>
                     <th>Username</th>
-                    <th>Max Score</th>
+                    <th>Max Streak</th>
                     <th>Games Played</th>
                 </tr>
             </thead>
             <tbody>
-                {% for (user_name, max_score, games_played) in drawing_gamemode_scores %}
+                {% for (user_name, max_score, games_played) in detecting_gamemode_scores %}
                 <tr {% if user_name == current_user.user_name %} class="current_user_row" {% endif %}>
                     <td {% if loop.index == 1 %} class="first_row" {% elif loop.index == 2 %} class="second_row" {% elif loop.index == 3 %} class="third_row" {% endif %}>{{ loop.index }}</td>
                     <td>{{ user_name }}</td>
-                    <td>{{ max_score }}%</td>
+                    <td>{{ max_score | int }}</td>
                     <td>{{ games_played }}</td>
                 </tr>
                 {% endfor %}
@@ -53,28 +50,6 @@
 {% block scripts %}
 <script src="{{ url_for( 'static', filename='to_europe.js', v=1)}}"></script>
 <script>
-    document.getElementById("time-range").addEventListener("change", ()=>{
-        switch(document.getElementById("time-range").value){
-            case "0": 
-                document.getElementsByClassName("time-output")[0].innerHTML = "10s";
-                localStorage.setItem('time', 10);
-                break;
-            case "1": 
-                document.getElementsByClassName("time-output")[0].innerHTML = "15s";
-                localStorage.setItem('time', 15);
-                break;
-            case "2": 
-                document.getElementsByClassName("time-output")[0].innerHTML = "30s";
-                localStorage.setItem('time', 30);
-                break;
-            default:
-                document.getElementsByClassName("time-output")[0].innerHTML = "30s";
-                localStorage.setItem('time', 30);
-                break;
-
-        }
-    })
-
     document.getElementById("leaderboard_button").addEventListener("click", () => {
         var element = document.getElementById("leaderboard");
         element.classList.add("active");

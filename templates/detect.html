@@ -23,12 +23,13 @@
                 <a class="temp third" id="number3">{{ number3 }}</a>
                 <a class="temp third button-2" id="number4">{{ number4 }}</a>
             </div>
-            <a class="temp second">Current streak: {{ streak_count }}</a>
+            <div class="temp second" id="detect_timer">Time left: 3s</div>
         </div>
         <div class="invisible inv-text">
             <h1 id="response" class="lower-text h1"></h1>
             <h2 id="answer" class="lower-text h2"></h2>
-            <a class="temp third" id="detect">Play Again</a>
+            <a class="temp third" id="detect">Continue</a>
+            <a class="temp second" id="streak_counter">Current streak: {{ streak_count }}</a>
         </div>
     </div>
 {% endblock %}
@@ -36,7 +37,7 @@
 {% block scripts %}
 <script>
     clicked = false
-    
+
     let scroll = localStorage.getItem("scroll");
 
     if(scroll){
@@ -47,8 +48,24 @@
         if(clicked) return;
         clicked = true;
 
-        document.getElementById('response').innerHTML = response ? "Correct!!!" : "Wrong -_-";
-        document.getElementById('answer').innerHTML = "This is {{ mainName }}"
+        if (response == 1) {
+            document.getElementById('response').innerHTML = "Correct!";
+            document.getElementById('streak_counter').innerHTML = "Current streak: {{ streak_count + 1 }}";
+
+        } else {
+            let continue_button = document.getElementById("detect");
+            continue_button.innerHTML = "Played again";
+            continue_button.id = "detect_go_to_menu";
+            if (response == 0) {
+                document.getElementById('response').innerHTML = "Wrong. Game over";
+            }
+            else {
+                document.getElementById('response').innerHTML = "You did not give an answer. Game over";
+            }
+
+            document.getElementById('streak_counter').innerHTML = "Total streak: {{ streak_count }}";
+        }
+        document.getElementById('answer').innerHTML = response == 1 ? "This is {{ mainName }}" : "This was {{ mainName }}";
         element.classList.remove("invisible");
         document.getElementsByClassName('ob')[0].classList.add("invisible");
 
@@ -59,7 +76,15 @@
         })
         .then(res => res.json())
         .then(data => {
-            document.querySelector('.temp.second').innerText = "Current streak: " + data.streak_count;
+            if (response == 0 || response == 2) {
+                const streakCount = data.streak_count;
+            
+            fetch('/save_streak', {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ streak: streakCount })
+            });
+            }
         });
     };
 
@@ -101,7 +126,7 @@
             show(element, 0)
         }
     });
-    
+
 </script>
 <script src="{{ url_for( 'static', filename='detect.js', v=1)}}"></script>
 {% endblock %}

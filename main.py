@@ -276,6 +276,19 @@ def result():
     else:
         return redirect('/', show_logout = True)
 
+@app.route('/detectdefine', methods=['GET', 'POST'])
+@login_required
+def detectdefine():
+    detecting_gamemode_scores = db.session.query (
+        Users.user_name,
+        func.max(Scores.score).label('max_score'),
+        func.count(Scores.score)
+    )   .join(Scores, Users.user_id == Scores.user_id)\
+        .filter(Scores.gamemode_id == 2)\
+        .group_by(Users.user_name)\
+        .order_by(desc('max_score')).all()
+    return render_template('detectdefine.html', detecting_gamemode_scores = detecting_gamemode_scores, show_logout = True)
+
 @app.route('/detect', methods=['GET', 'POST'])
 @login_required
 def detect():
@@ -285,7 +298,6 @@ def detect():
     if region != "Detect":
         return redirect('/')
     
-
     session['in_detect_page'] = True
 
     if 'streak_count' not in session:
@@ -308,19 +320,35 @@ def update_streak():
     
     data = request.get_json()
 
-    if data.get('correct'):
+    if data.get('correct') == 1:
         session['streak_count'] += 1
     else:
+        prev_streak_count = session['streak_count']
         session['streak_count'] = 0
 
     session.modified = True
-    return {'streak_count': session['streak_count']}
+
+    if data.get('correct') == 1:
+        return {'streak_count': session['streak_count']}
+    else:
+        return {'streak_count': prev_streak_count}
+
+@app.route('/save_streak', methods=['POST'])
+def save_streak():
+    if request.method != "POST":
+        return redirect('/')
+    
+    data = request.get_json()
+    score = Scores(user_id=current_user.user_id, gamemode_id=2, score=data['streak'])
+    db.session.add(score)
+    db.session.commit()
+
+    return {'status': 'success'}
 
 @app.before_request
 def handle_before_request():
     if 'in_detect_page' in session and session['in_detect_page']:
         if not request.path.startswith('/static/') and request.path not in ['/detect', '/update_streak']:
-            print("Reloading")
             session['streak_count'] = 0
             session['in_detect_page'] = False
             session.modified = True
