@@ -115,7 +115,7 @@ class Users(db.Model, UserMixin):
 class Scores(db.Model):
     __tablename__ = 'scores'
 
-    id = db.Column(db.BigInteger, primary_key = True)
+    score_id = db.Column(db.BigInteger, primary_key = True)
     user_id = db.Column(db.BigInteger, db.ForeignKey('users.user_id'), nullable = False)
     gamemode_id = db.Column(db.BigInteger, nullable = False)
     score = db.Column(db.Float, nullable = False)

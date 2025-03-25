@@ -27,11 +27,18 @@
         {% block header %}
             <img src="{{ url_for( 'static', filename='logo-color.png', v=1)}}" alt="logo" class="logo">
             {% if show_logout %}
-            {% if logged_in_username %}
-            <a id = 'logged_in_username' class="nav-link" href = "/logout">{{ logged_in_username }}</a>
-            {% else %}
-            <a class="nav-link" href="/login">Login</a>
-            {% endif %}
+                <div class="user_options">
+                    {% if logged_in_username %}
+                    <a id = 'logged_in_username' class="gradient-text gradient_link" onclick="toggleDropdown(event)" href="#">{{ logged_in_username }}</a>
+                    <div class="logout-options">
+                        <a class="gradient-text">Log out?</a>
+                        <a class="gradient-text" href = "/logout" id="accept_button">Yes</a>
+                        <a class="gradient-text" href="#" id="reject_button">No</a>
+                    </div>
+                    {% else %}
+                    <a class="gradient-text gradient_link" href="/login">Login</a>
+                    {% endif %}
+                </div>
             {% endif %}
         {% endblock %}
     </header>
@@ -83,6 +90,31 @@
         });
     }
 
+    function toggleDropdown(event) {
+        event.preventDefault();
+        var logoutOptions = document.querySelector('.logout-options');
+        var usernameLabel = document.querySelector('#logged_in_username');
+
+        logoutOptions.classList.toggle('show');
+        usernameLabel.classList.toggle('active');
+    }
+
+    document.querySelector('.user_options').addEventListener('mouseleave', function() {
+        hideTimeout = setTimeout(function() {
+            document.querySelector('.logout-options').classList.remove("show");
+            document.querySelector('#logged_in_username').classList.remove("active");
+        }, 2000);
+    });
+
+    document.querySelector('.user_options').addEventListener('mouseenter', function() {
+        clearTimeout(hideTimeout);
+    });
+
+    document.getElementById("reject_button").addEventListener("click", (event) => {
+        event.preventDefault();
+        document.querySelector('.logout-options').classList.remove("show");
+        document.querySelector('#logged_in_username').classList.remove("active");
+    });
     </script>
 </body>
 </html>
