@@ -99,7 +99,7 @@ class Users(db.Model, UserMixin):
     user_password = db.Column(db.String, nullable = False)
     user_email = db.Column(db.String, unique = True, nullable = False)
 
-    scores = db.relationship('Scores', back_populates='user', cascade="all, delete-orphan")
+    score = db.relationship('Scores', back_populates='user', cascade="all, delete-orphan")
 
     def __init__(self, user_name, user_password, user_email):
         self.user_name = user_name
@@ -117,16 +117,35 @@ class Scores(db.Model):
 
     score_id = db.Column(db.BigInteger, primary_key = True)
     user_id = db.Column(db.BigInteger, db.ForeignKey('users.user_id'), nullable = False)
-    gamemode_id = db.Column(db.BigInteger, nullable = False)
+    gamemode_id = db.Column(db.BigInteger, db.ForeignKey('game_modes.gamemode_id'), nullable = False)
     score = db.Column(db.Float, nullable = False)
+    country_id = db.Column(db.Integer, db.ForeignKey('countries.country_id'), nullable=True)
 
-    user = db.relationship('Users', back_populates='scores')
+    user = db.relationship('Users', back_populates='score')
+    country = db.relationship('Countries', back_populates='score')
+    game_mode = db.relationship('GameModes', back_populates='score')
 
     def __init__(self, user_id, gamemode_id, score):
         self.user_id = user_id
         self.gamemode_id = gamemode_id
         self.score = score
 
+class Countries(db.Model):
+    __tablename__ = 'countries'
+
+    country_id = db.Column(db.Integer, primary_key=True, autoincrement=True, unique=True)
+    country_name = db.Column(db.String, unique=True, nullable=False)
+    continent = db.Column(db.String, nullable=False)
+
+    score = db.relationship('Scores', back_populates='country')
+
+class GameModes(db.Model):
+    __tablename__ = 'game_modes'
+
+    gamemode_id = db.Column(db.BigInteger, primary_key=True, unique=True)
+    gamemode_name = db.Column(db.String, unique=True, nullable=False)
+
+    score = db.relationship('Scores', back_populates='game_mode')
 
 def chooseCountry(country):
     number1, number2, number3, number4 = 0, 0, 0, 0
