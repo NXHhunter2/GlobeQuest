@@ -125,10 +125,11 @@ class Scores(db.Model):
     country = db.relationship('Countries', back_populates='score')
     game_mode = db.relationship('GameModes', back_populates='score')
 
-    def __init__(self, user_id, gamemode_id, score):
+    def __init__(self, user_id, gamemode_id, score, country_id=None):
         self.user_id = user_id
         self.gamemode_id = gamemode_id
         self.score = score
+        self.country_id = country_id
 
 class Countries(db.Model):
     __tablename__ = 'countries'
@@ -147,13 +148,13 @@ class GameModes(db.Model):
 
     score = db.relationship('Scores', back_populates='game_mode')
 
-def chooseCountry(country):
+def chooseCountry():
     number1, number2, number3, number4 = 0, 0, 0, 0
     while True:
-        number1 = random.randint(0, len(country)-1)
-        number2 = random.randint(0, len(country)-1)
-        number3 = random.randint(0, len(country)-1)
-        number4 = random.randint(0, len(country)-1)
+        number1 = Countries.query.order_by(func.random()).first()
+        number2 = Countries.query.order_by(func.random()).first()
+        number3 = Countries.query.order_by(func.random()).first()
+        number4 = Countries.query.order_by(func.random()).first()
         if (number1!=number2 and number1!=number3 and number1!=number4) and (number2!=number3 and number2!=number4) and (number3!=number4):
             break
     mainId = random.randint(1, 4)
@@ -167,28 +168,6 @@ def chooseCountry(country):
         mainCountry = number4
     
     return number1, number2, number3, number4, mainCountry
-
-
-country = [["Russia", "countries/russia.jpg", "Europe / Asia"],
-           ["Germany", "countries/germany.png", "Europe"],
-           ["Canada", "countries/canada.png", "North America"],
-           ["Poland", "countries/poland.png", "Europe"],
-           ["United States", "countries/usa.png", "North America"],
-           ["Turkey", "countries/turkey.png", "Europe / Asia"],
-           ["Brazil", "countries/brazil.png", "South America"],
-           ["Mexico", "countries/mexico.png", "North America"],
-           ["Austria", "countries/austria.png", "Europe"],
-           ["China", "countries/china.png", "Asia"],
-           ["Australia", "countries/australia.png", "Oceania"],
-           ["Finland", "countries/finland.png", "Europe"],
-           ["France", "countries/france.png", "Europe"],
-           ["India", "countries/india.png", "Asia"],
-           ["Italy", "countries/italy.png", "Europe"],
-           ["Japan", "countries/japan.png", "Asia"],
-           ["Norway", "countries/norway.png", "Europe"],
-           ["South Africa", "countries/south africa.png", "Africa"],
-           ["Spain", "countries/spain.png", "Europe"],
-           ["United Kingdom", "countries/uk.png", "Europe"]]
 
 PAGE_HELP_MAPPING = {
     '/': '/help_main',
@@ -259,17 +238,18 @@ def draw():
     if request.method == "POST":
         region = request.form.get('region')
         if region == "Europe":
-            while True:
-                number = random.randint(0, len(country)-1)
-                if "Europe" in country[number][2]:
-                    break
+            queried_countries = Countries.query.filter(Countries.continent.like('%Europe%')).order_by(func.random()).first()
         else:
-            number = random.randint(0, len(country)-1)
-    else: 
+            queried_countries = Countries.query.order_by(func.random()).first()
+    else:
         return redirect('/')
-    draw_country = country[number]
-    session['draw_country'] = draw_country
-    return render_template('draw.html', country=draw_country[0], show_logout = True)
+    draw_country = queried_countries
+    session['draw_country'] = {
+        'country_id': draw_country.country_id,
+        'country_name': draw_country.country_name,
+        'continent': draw_country.continent,
+    }
+    return render_template('draw.html', country=draw_country.country_name, show_logout = True)
 
 @app.route('/compare', methods=['GET', 'POST'])
 @login_required
@@ -277,19 +257,20 @@ def result():
     if request.method == "POST" and session.get('draw_country', None):
         url = request.form.get('url')
         draw_country = session.get('draw_country', None)
-        hash1, hash2, compared = compare.compare(url, draw_country[1])
+        country_url = f"countries/{draw_country['country_name'].lower().replace(' ', '_')}.png"
+        hash1, hash2, compared = compare.compare(url, country_url)
         # gamemode_id = 1 –––> 'Drawing' gamemode
         # gamemode_id = 2 –––> 'Detecting' gamemode
-        score = Scores(user_id=current_user.user_id, gamemode_id=1, score=compared)
+        score = Scores(user_id=current_user.user_id, gamemode_id=1, score=compared, country_id=draw_country['country_id'])
         db.session.add(score)
         db.session.commit()
         return render_template('compare.html',
                                hash1=hash1,
                                hash2=hash2,
                                compared=compared,
-                               country=draw_country[0],
-                               path=draw_country[1],
-                               region=draw_country[2],
+                               country=draw_country['country_name'],
+                               path=country_url,
+                               region=draw_country['continent'],
                                original=url,
                                show_logout = True)
     else:
@@ -322,14 +303,14 @@ def detect():
     if 'streak_count' not in session:
         session['streak_count'] = 0
 
-    number1, number2, number3, number4, mainCountry = chooseCountry(country)
+    number1, number2, number3, number4, mainCountry = chooseCountry()
     return render_template('detect.html',
-                           number1=country[number1][0], 
-                           number2=country[number2][0], 
-                           number3=country[number3][0], 
-                           number4=country[number4][0], 
-                           mainCountry=country[mainCountry][1],
-                           mainName=country[mainCountry][0],
+                           number1=number1.country_name,
+                           number2=number2.country_name,
+                           number3=number3.country_name,
+                           number4=number4.country_name,
+                           mainCountry=f"countries/{mainCountry.country_name.lower().replace(' ', '_')}.png",
+                           mainName=mainCountry.country_name,
                            streak_count=session['streak_count'], show_logout = True)
 
 @app.route('/update_streak', methods=['POST'])
