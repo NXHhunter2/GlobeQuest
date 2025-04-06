@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import Flask, flash, request, render_template, session, redirect
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func, desc
@@ -47,6 +48,10 @@ def login():
         user = Users.query.filter_by(user_name = form.username.data).first()
         if user:
             if user.user_password == form.password.data:
+                current_login = LoginHistory(user_id=user.user_id, login_time=datetime.now(), ip_address=request.remote_addr)
+                db.session.add(current_login)
+                db.session.commit()
+                
                 login_user(user)
                 flash("Logged in successfully.")
                 return redirect('/')
