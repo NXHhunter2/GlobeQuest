@@ -80,8 +80,6 @@ def register():
                 if form.email.data:
                     flash(error)
 
-
-
     return render_template('register.html', form = form, show_logout = False)
 
 @app.route('/logout', methods = ['GET', 'POST'])
@@ -100,6 +98,7 @@ class Users(db.Model, UserMixin):
     user_email = db.Column(db.String, unique = True, nullable = False)
 
     score = db.relationship('Scores', back_populates='user', cascade="all, delete-orphan")
+    login_history = db.relationship('LoginHistory', back_populates='user', cascade='all, delete-orphan')
 
     def __init__(self, user_name, user_password, user_email):
         self.user_name = user_name
@@ -147,6 +146,21 @@ class GameModes(db.Model):
     gamemode_name = db.Column(db.String, unique=True, nullable=False)
 
     score = db.relationship('Scores', back_populates='game_mode')
+
+class LoginHistory(db.Model):
+    __tablename__ = 'login_history'
+
+    login_id = db.Column(db.BigInteger, primary_key=True, autoincrement=True, unique=True)
+    user_id = db.Column(db.BigInteger, db.ForeignKey('users.user_id'), nullable=False)
+    login_time = db.Column(db.DateTime, nullable=False)
+    ip_address = db.Column(db.String, nullable=True)
+
+    user = db.relationship('Users', back_populates='login_history')
+
+    def __init__(self, user_id, login_time, ip_address=None):
+        self.user_id = user_id
+        self.login_time = login_time
+        self.ip_address = ip_address
 
 def chooseCountry():
     number1, number2, number3, number4 = 0, 0, 0, 0
