@@ -167,6 +167,16 @@ class LoginHistory(db.Model):
         self.login_time = login_time
         self.ip_address = ip_address
 
+class FlagNames(db.Model):
+    __tablename__ = 'flag_names'
+
+    id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
+    country_id = db.Column(db.BigInteger, nullable=False)
+    code2l = db.Column(db.String(2), nullable=False, default='')
+    language = db.Column(db.String(5), nullable=False, default='')
+    name = db.Column(db.String(255), nullable=True)
+    name_official = db.Column(db.String(255), nullable=True)
+
 def chooseCountry():
     number1, number2, number3, number4 = 0, 0, 0, 0
     while True:

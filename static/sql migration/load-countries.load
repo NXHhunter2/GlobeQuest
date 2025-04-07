@@ -1,0 +1,11 @@
+LOAD DATABASE
+     FROM mysql://root:020Kruzer020@localhost/flags
+     INTO postgresql://postgres:020Kruzer020@localhost/GlobeQuest
+
+ WITH include no drop, 
+      create tables, 
+      create indexes, 
+      reset sequences,
+      data only
+
+ ALTER SCHEMA 'source_db' RENAME TO 'public';
