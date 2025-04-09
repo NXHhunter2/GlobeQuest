@@ -476,7 +476,6 @@ background: #555;
     min-width: 250px;
 }
 
-
 .logout-options {
     visibility: hidden;
     opacity: 0;
@@ -518,4 +517,8 @@ background: #555;
     background-size: 200%;
     animation: underlineGlow 6s infinite linear;
     transition: width 0.2s ease;
+}
+
+.flags_gamemode_button {
+    margin-top: -1rem;
 }

@@ -1,0 +1,45 @@
+input[type="text"] {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 20px;
+    border: 2px solid #ccc;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    outline: none;
+}
+input[type="text"]:focus {
+    border-color: rgb(240, 89, 41);
+    box-shadow: 0 0 20px rgb(240, 89, 41);
+    background-color: #fafafa;
+}
+
+input.error {
+    color: red;
+}
+
+.img_fade.loaded {
+    box-shadow: 0 0 20px 2px white;
+}
+
+.btns {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.main-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flag_container {
+    min-height: 150px;
+    box-shadow: none;
+    background: url('/static/loading.gif') center center no-repeat;
+}
+
+.flag_container.loaded {
+    background: none;
+}

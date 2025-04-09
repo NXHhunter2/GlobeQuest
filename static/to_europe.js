@@ -68,11 +68,25 @@ if(document.getElementById("start_detecting")){
     event.preventDefault();
     post('/detect', {type: "Detect"});
   });
-  }
+}
 
 if(document.getElementById("drawdefine")){
   document.getElementById("drawdefine").addEventListener("click", (event) => {
     event.preventDefault();
     post('/drawdefine', {type: "Drawdefine"});
+  });
+}
+
+if(document.getElementById("guess_flags")){
+  document.getElementById("guess_flags").addEventListener("click", (event) => {
+    event.preventDefault();
+    post('/flagdefine');
+  });
+}
+
+if(document.getElementById("start_guessing_flags")){
+  document.getElementById("start_guessing_flags").addEventListener("click", (event) => {
+    event.preventDefault();
+    post('/flags');
   });
 }

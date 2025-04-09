@@ -368,9 +368,16 @@ def save_streak():
         return redirect('/')
     
     data = request.get_json()
-    score = Scores(user_id=current_user.user_id, gamemode_id=2, score=data['streak'])
-    db.session.add(score)
-    db.session.commit()
+
+    if data['gamemode'] == 2:
+        score = Scores(user_id=current_user.user_id, gamemode_id=2, score=data['streak'])
+        db.session.add(score)
+        db.session.commit()
+
+    elif data['gamemode'] == 3:
+        score = Scores(user_id=current_user.user_id, gamemode_id=3, score=data['streak'])
+        db.session.add(score)
+        db.session.commit()
 
     return {'status': 'success'}
 
@@ -380,6 +387,11 @@ def handle_before_request():
         if not request.path.startswith('/static/') and request.path not in ['/detect', '/update_streak']:
             session['streak_count'] = 0
             session['in_detect_page'] = False
+            session.modified = True
+    elif 'in_flag_page' in session and session['in_flag_page']:
+        if not request.path.startswith('/static/') and request.path not in ['/flags', '/update_streak']:
+            session['streak_count'] = 0
+            session['in_flag_page'] = False
             session.modified = True
 
 
@@ -396,6 +408,38 @@ def help():
         return render_template('help.html')
     else:
         return redirect('/')
+
+@app.route('/flagdefine', methods=['GET', 'POST'])
+@login_required
+def flagdefine():
+    flag_guessing_gamemode_scores = db.session.query (
+        Users.user_name,
+        func.max(Scores.score).label('max_score'),
+        func.count(Scores.score)
+    )   .join(Scores, Users.user_id == Scores.user_id)\
+        .filter(Scores.gamemode_id == 3)\
+        .group_by(Users.user_name)\
+        .order_by(desc('max_score')).all()
+    return render_template('flagdefine.html', flag_guessing_gamemode_scores = flag_guessing_gamemode_scores, show_logout = True)
+
+@app.route('/flags', methods=['GET', 'POST'])
+@login_required
+def guess_flags():
+    if request.method != "POST":
+        return redirect('/')
+    else:
+        main_country = db.session.query(FlagNames).filter_by(language='en').order_by(func.random()).first()
+
+        session['in_flag_page'] = True
+
+        if 'streak_count' not in session:
+            session['streak_count'] = 0
+
+        return render_template('flags.html',
+                               name=main_country.name,
+                               flag_img=f'https://raw.githubusercontent.com/cristiroma/countries/9f88008d1917f66b13bdc8e03af8a891b5398665/data/flags/SVG/{main_country.code2l}.svg',
+                               streak_count=session['streak_count'],
+                               show_logout=True)
 
 if __name__ == '__main__':
     app.run()

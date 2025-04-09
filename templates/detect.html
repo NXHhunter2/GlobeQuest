@@ -72,7 +72,7 @@
         fetch('/update_streak', {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ correct: response })
+            body: JSON.stringify({ correct: response})
         })
         .then(res => res.json())
         .then(data => {
@@ -82,7 +82,7 @@
             fetch('/save_streak', {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ streak: streakCount })
+                body: JSON.stringify({ streak: streakCount, gamemode: 2 })
             });
             }
         });

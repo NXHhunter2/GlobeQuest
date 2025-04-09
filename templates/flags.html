@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}GlobeQuest{% endblock %}
+
+{% block additional_styles %}
+<link rel="stylesheet" href="{{ url_for( 'static', filename='flags.css', v=1)}}">
+<link rel="stylesheet" href="{{ url_for( 'static', filename='compare.css', v=1)}}">
+<link rel="stylesheet" href="{{ url_for( 'static', filename='detect.css', v=1)}}">
+{% endblock %}
+
+{% block content %}
+<div class="compare-container gradient">
+    <section class="temp first">Guess the flag's country!</section>
+    <div class="flag_container img-box" id="flag_container">
+        <img src="{{ flag_img }}" class="country-img img img_fade" id="country-img" alt="flag"/>
+    </div>
+    <div class="ob">
+        <h1 class="main-text">Name the country for this flag</h1>
+        <input type="text" id="countryInput" placeholder="Enter country name..." autocomplete="off">
+        <div class="btns">
+            <a class="temp third" id="give_up">Give Up</a>
+        </div>
+        <a class="temp second" id="in_game_streak_counter">Current streak: {{ streak_count }}</a>
+    </div>
+    <div class="invisible inv-text">
+        <h1 id="response" class="lower-text h1"></h1>
+        <h2 id="answer" class="lower-text h2"></h2>
+        <a class="temp third" id="guess_flags">Continue</a> <!-- PLAY AGAIN BUTTON BRINGS TO FLAGDEFINE -->
+        <a class="temp second" id="streak_counter">Current streak: {{ streak_count }}</a>
+    </div>
+</div>  
+{% endblock %}
+
+{% block scripts %}
+<script>
+    let scroll = localStorage.getItem("scroll");
+
+    if(scroll){
+        window.scroll(0, scroll);
+    }
+
+    const mainCountry = "{{ name|lower }}";
+    var response = -1;
+    let errorTimer = null;
+    console.log(mainCountry);
+
+    const input = document.getElementById('countryInput');
+
+    document.getElementById('countryInput').addEventListener('input', function () {
+        const guess = this.value.trim().toLowerCase();
+        input.classList.remove('error');
+        if (guess === mainCountry) {
+            response = 1
+
+            document.getElementById('response').innerHTML = "Correct!";
+            document.getElementById('answer').innerHTML = "This is {{ name }}";
+            document.getElementById('streak_counter').innerHTML = "Current streak: {{ streak_count + 1 }}";
+
+            const resultBlock = document.querySelector('.inv-text');
+            resultBlock.classList.remove('invisible');
+
+            document.getElementsByClassName('ob')[0].classList.add("invisible");
+            process_streak(response);
+        }
+        else {
+            if (errorTimer !== null) {
+                clearTimeout(errorTimer);
+            }
+    
+            errorTimer = setTimeout(() => {
+                markInputError();
+            }, 500);
+        }
+      });
+
+    function markInputError() {
+        input.classList.add('error');
+    }
+
+    document.getElementById("give_up").addEventListener('click', ()=>{
+        response = 0
+
+        document.getElementById('response').innerHTML = "You gave up. Game over";
+        document.getElementById('answer').innerHTML = "This was {{ name }}";
+        document.getElementById('streak_counter').innerHTML = "Total streak: {{ streak_count }}";
+
+        let continue_button = document.getElementById("guess_flags");
+        continue_button.innerHTML = "Play again";
+        continue_button.id = "guess_flags_go_to_menu";
+
+        const resultBlock = document.querySelector('.inv-text');
+        resultBlock.classList.remove('invisible');
+
+        document.getElementsByClassName('ob')[0].classList.add("invisible");
+        process_streak(response);
+    });
+
+    const process_streak = (response) => {
+        fetch('/update_streak', {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ correct: response })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (response == 0 || response == 2) {
+                const streakCount = data.streak_count;
+            
+            fetch('/save_streak', {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ streak: streakCount, gamemode: 3})
+            });
+            }
+        });
+    };
+
+    const img = document.getElementById('country-img');
+    const flag_container = document.getElementById('flag_container');
+
+    img.addEventListener('load', function () {
+        img.classList.add('loaded');
+        flag_container.classList.add('loaded');
+    });
+
+</script>
+<script src="{{ url_for( 'static', filename='flags.js', v=1)}}"></script>
+{% endblock %}
