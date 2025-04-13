@@ -251,14 +251,32 @@ def drawdefine():
     region = request.form.get('type')
     if region != "Drawdefine":
         return redirect('/')
-    drawing_gamemode_scores = db.session.query (
+    
+    max_scores = db.session.query(
+        Scores.user_id,
+        func.max(Scores.score).label("max_score")
+    ).filter(Scores.gamemode_id == 1).group_by(Scores.user_id).subquery()
+
+    # Подзапрос 2: кол-во игр каждого пользователя в режиме 1
+    games_played_subq = db.session.query(
+        Scores.user_id,
+        func.count(Scores.score).label("games_played")
+    ).filter(Scores.gamemode_id == 1).group_by(Scores.user_id).subquery()
+
+    # Основной запрос
+    drawing_gamemode_scores = db.session.query(
         Users.user_name,
-        func.max(Scores.score).label('max_score'),
-        func.count(Scores.score)
-    )   .join(Scores, Users.user_id == Scores.user_id)\
-        .filter(Scores.gamemode_id == 1)\
-        .group_by(Users.user_name)\
-        .order_by(desc('max_score')).all()
+        Scores.score,
+        games_played_subq.columns.games_played,
+        Countries.country_name
+    ).join(Scores, Users.user_id == Scores.user_id)\
+    .join(max_scores, (Scores.user_id == max_scores.columns.user_id) & (Scores.score == max_scores.columns.max_score))\
+    .join(games_played_subq, Scores.user_id == games_played_subq.columns.user_id)\
+    .outerjoin(Countries, Scores.country_id == Countries.country_id)\
+    .filter(Scores.gamemode_id == 1)\
+    .order_by(desc(Scores.score))\
+    .all()
+
     return render_template('drawdefine.html', drawing_gamemode_scores = drawing_gamemode_scores, show_logout = True)
 
 @app.route('/draw', methods=['GET', 'POST'])

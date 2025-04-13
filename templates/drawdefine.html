@@ -31,15 +31,17 @@
                     <th>Username</th>
                     <th>Max Score</th>
                     <th>Games Played</th>
+                    <th>Best country</th>
                 </tr>
             </thead>
             <tbody>
-                {% for (user_name, max_score, games_played) in drawing_gamemode_scores %}
+                {% for (user_name, max_score, games_played, score_country) in drawing_gamemode_scores %}
                 <tr {% if user_name == current_user.user_name %} class="current_user_row" {% endif %}>
                     <td {% if loop.index == 1 %} class="first_row" {% elif loop.index == 2 %} class="second_row" {% elif loop.index == 3 %} class="third_row" {% endif %}>{{ loop.index }}</td>
                     <td>{{ user_name }}</td>
                     <td>{{ max_score }}%</td>
                     <td>{{ games_played }}</td>
+                    <td>{{ score_country }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
