@@ -519,6 +519,41 @@ background: #555;
     transition: width 0.2s ease;
 }
 
+.all_btns {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+.coordinates_gamemode_button {
+    position: relative;
+    width: auto;
+    order: 1;
+    padding: 0.3em;
+    padding-left: 0.6em;
+    padding-right: 0.6em;
+    overflow: hidden;
+}
+
+.popular-label {
+    position: absolute;
+    top: 10px;
+    left: -20px;
+    font-size: 12px;
+    color: white;
+    background: linear-gradient(to right, rgba(238, 95, 0, 0.5), rgba(100, 50, 229, 0.5));
+    padding: 3px 20px;
+    transform: rotate(-40deg);
+    font-weight: bold;
+    width: auto;
+}
+
+.btns {
+    order: 2;
+}
+
 .flags_gamemode_button {
-    margin-top: -1rem;
+    width: auto;
+    order: 3;
 }

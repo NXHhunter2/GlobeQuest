@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}GlobeQuest{% endblock %}
+{% block header %}<img src="{{ url_for( 'static', filename='text_logo.png', v=1)}}" alt="logo" class="logo">{% endblock %}
+
+{% block additional_styles %}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <link rel="stylesheet" href="{{ url_for( 'static', filename='coordinates.css', v=1)}}">
+{% endblock %}
+
+{% block content %}
+    <div class="gradient">
+        <section class="temp first">Guess the coordinates of a photo!</section>
+        <div class="map_img">
+            <div id="image-container">
+                <img id="guess-image" src="" />
+            </div>
+
+            <div id="map-container">
+                <div id="map"></div>
+            </div>
+        </div>
+        
+        <div class="text_result invisible" id="text_result">
+            <a class="lower-text h1" id="guess_coordinates_response">placeholder</a>
+            <a class="lower-text h2" id="guess_coordinates_answer">placeholder</a>
+        </div>
+        
+        <div class="btns">
+            <a class="temp third" id="guessButton">Guess</a>
+            <a id="make_guess_notifier">Make a guess first.</a>
+        </div>
+        
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    let userMarker = null;
+    let userGuess = null;
+
+    let map = L.map('map').setView([20, 0], 2);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+    }).addTo(map);
+
+
+    const bounds = [[85, -180], [-85, 180]];
+
+    map.setMaxBounds(bounds);
+
+    map.on('click', function(e) {
+        if (userMarker) map.removeLayer(userMarker);
+        userGuess = e.latlng;
+        userMarker = L.marker(e.latlng).addTo(map);
+        console.log("User guessed:", e.latlng.lat, e.latlng.lng);
+    });
+
+    let guess_button = document.getElementById("guessButton");
+
+    guess_button.addEventListener("click", function() {
+        if (!userGuess) {
+            document.getElementById("make_guess_notifier").classList.add("active");
+
+            setTimeout(() => {
+                document.getElementById("make_guess_notifier").classList.remove("active");
+            }, 1500);
+
+            return;
+        }
+
+        fetch('/check_guess', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                lat: userGuess.lat,
+                lng: userGuess.lng,
+                true_lat: window.trueLat,
+                true_lng: window.trueLng
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("guess_coordinates_answer").innerHTML = `Your guess is ${data.distance_km.toFixed(2)} km away from the actual location.`;
+
+            const trueMarker = L.marker([data.true_lat, data.true_lng], {
+                title: "Actual place",
+                icon: L.icon({
+                    iconUrl: "https://maps.google.com/mapfiles/ms/icons/green-dot.png",
+                    iconSize: [32, 32],
+                    iconAnchor: [16, 32]
+                })
+            }).addTo(map);
+
+            fetch('/save_coordinates_score', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    distance_km: data.distance_km,
+                })
+            })
+            .then(response => response.json())
+            .then(result => {
+                document.getElementById("guess_coordinates_response").innerText = `Your score is ${result.score}.`;
+            })
+        });
+
+        document.getElementById("make_guess_notifier").classList.add("invisible");
+
+        let guess_button = document.getElementById("guessButton");
+        guess_button.innerHTML = "Play again";
+        guess_button.id = "guess_coordinates_go_to_menu";
+
+        document.getElementById("text_result").classList.remove('invisible');
+    });
+
+    fetch('/get_random_image')
+        .then(response => response.json())
+        .then(data => {
+            if (data.image_url) {
+                document.getElementById("guess-image").src = data.image_url;
+                window.trueLat = data.latitude;
+                window.trueLng = data.longitude;
+                console.log(window.trueLat, window.trueLng)
+            }
+        });
+
+</script>
+
+<script src="{{ url_for( 'static', filename='coordinates_guessing.js', v=1)}}"></script>
+{% endblock %}

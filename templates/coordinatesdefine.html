@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}GlobeQuest{% endblock %}
+
+{% block content %}
+<div class="gradient">
+    <section class="temp first">Location guessing</section>
+    <section class="temp second">Presented with a photograph taken from a specific location, the goal is to accurately place a point on the map where the photo was taken. The closer the point is to the correct location, the higher the score. You can maximum get 5000 points.</section>
+    <div class="btns">
+        <a class="temp third" id="start_guessing_location">Start</a>
+        <div class="temp second inter">or</div>
+        <div class="temp third leaderboard_button" id ="leaderboard_button">Leaderboard</div>   
+    </div>
+</div>
+
+<div class="leaderboard_background" id = "leaderboard_background"></div>
+<div class = "leaderboard" id = "leaderboard">
+    <a class="leaderboard_caption gradient-text">Location guessing leaderboard</a>
+    <div class = "dyn-height row_align">
+        <table class = "content">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Username</th>
+                    <th>Max Score</th>
+                    <th>Games Played</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for (user_name, max_score, games_played) in coordinates_guessing_gamemode_scores %}
+                <tr {% if user_name == current_user.user_name %} class="current_user_row" {% endif %}>
+                    <td {% if loop.index == 1 %} class="first_row" {% elif loop.index == 2 %} class="second_row" {% elif loop.index == 3 %} class="third_row" {% endif %}>{{ loop.index }}</td>
+                    <td>{{ user_name }}</td>
+                    <td>{{ max_score | int }}</td>
+                    <td>{{ games_played }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <a class="leaderboard_closing_hint">Click anywhere outside the leaderboard to close it.</a>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for( 'static', filename='to_europe.js', v=1)}}"></script>
+<script>
+    document.getElementById("leaderboard_button").addEventListener("click", () => {
+        var element = document.getElementById("leaderboard");
+        element.classList.add("active");
+    })
+
+    document.getElementById("leaderboard_button").addEventListener("click", () => {
+        var element = document.getElementById("leaderboard_background");
+        element.classList.add("active");
+    })
+ 
+    document.addEventListener("DOMContentLoaded", () => {
+        const dynHeight = document.querySelector('.dyn-height');
+        const hasScrollbar = dynHeight.scrollHeight > dynHeight.clientHeight;
+    
+        if (hasScrollbar) {
+            dynHeight.style.marginRight = 'calc(15px - 25px)';
+        }
+    });
+
+    document.getElementById('leaderboard_background').addEventListener('click', (e) => {
+        if (e.target.classList.contains('leaderboard_background')) {
+            document.getElementById('leaderboard_background').classList.remove("active");
+            document.getElementById('leaderboard').classList.remove("active");
+        }
+    });
+</script>
+{% endblock %}

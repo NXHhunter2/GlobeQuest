@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import Flask, flash, request, render_template, session, redirect
+from flask import Flask, flash, request, render_template, session, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func, desc
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
@@ -7,9 +7,11 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, EmailField
 from wtforms.validators import DataRequired, Email, Length
 from flask_migrate import Migrate
-import compare
+import compare, geometry
 import random
-import psycopg2
+from dotenv import load_dotenv
+import hashlib
+import os
 
 app = Flask(__name__)
 app.secret_key = "ThOD4fSYjEDhma9YgIq33NIcgSJhqxDA4hHTPqlDzXY"
@@ -17,6 +19,9 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:020Kruzer020@localhost/GlobeQuest'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+load_dotenv()
+MAPILLARY_TOKEN = os.getenv("MAPILLARY_TOKEN")
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
@@ -36,9 +41,9 @@ class LoginForm(FlaskForm):
     submit = SubmitField("Submit")
 
 class RegisterForm(FlaskForm):
-    username = StringField("Username", validators=[DataRequired(), Length(min = 4, max = 20)], render_kw={"autocomplete": "off"})
+    username = StringField("Username", validators=[DataRequired(), Length(min = 8, max = 20)], render_kw={"autocomplete": "off"})
     email = EmailField("Email", validators=[DataRequired(), Email()], render_kw={"autocomplete": "off"})
-    password = PasswordField("Password", validators=[DataRequired()], render_kw={"autocomplete": "off"})
+    password = PasswordField("Password", validators=[DataRequired(), Length(min = 8)], render_kw={"autocomplete": "off"})
     submit = SubmitField("Submit")
 
 @app.route('/login', methods = ['GET', 'POST'])
@@ -47,7 +52,16 @@ def login():
     if form.validate_on_submit():
         user = Users.query.filter_by(user_name = form.username.data).first()
         if user:
-            if user.user_password == form.password.data:
+            salt = bytes.fromhex(user.user_salt)
+
+            input_password_hash = hashlib.pbkdf2_hmac(
+                'sha256',
+                form.password.data.encode('utf-8'),
+                salt,
+                100000
+            ).hex()
+
+            if user.user_password == input_password_hash:
                 current_login = LoginHistory(user_id=user.user_id, login_time=datetime.now(), ip_address=request.remote_addr)
                 db.session.add(current_login)
                 db.session.commit()
@@ -68,9 +82,15 @@ def register():
         user_email_check = Users.query.filter_by(user_email = form.email.data).first()
         user_username_check = Users.query.filter_by(user_name = form.username.data).first()
         if (user_email_check, user_username_check) == (None, None):
-            user = Users(user_name=form.username.data, user_password=form.password.data, user_email=form.email.data)
+            salt = os.urandom(16)
+
+            password = form.password.data.encode('utf-8')
+            password_hash = hashlib.pbkdf2_hmac('sha256', password, salt, 100000)
+            
+            user = Users(user_name=form.username.data, user_password=password_hash.hex(), user_salt=salt.hex(), user_email=form.email.data)
             db.session.add(user)
             db.session.commit()
+
             flash("Registration successful.")
             return redirect('/login')
         elif user_email_check is not None and user_username_check is None:
@@ -100,14 +120,16 @@ class Users(db.Model, UserMixin):
     user_id = db.Column(db.BigInteger, primary_key = True)
     user_name = db.Column(db.String, unique = True, nullable = False)
     user_password = db.Column(db.String, nullable = False)
+    user_salt = db.Column(db.String, nullable = True)
     user_email = db.Column(db.String, unique = True, nullable = False)
 
     score = db.relationship('Scores', back_populates='user', cascade="all, delete-orphan")
     login_history = db.relationship('LoginHistory', back_populates='user', cascade='all, delete-orphan')
 
-    def __init__(self, user_name, user_password, user_email):
+    def __init__(self, user_name, user_password, user_salt, user_email):
         self.user_name = user_name
         self.user_password = user_password
+        self.user_salt = user_salt
         self.user_email = user_email
 
     def __repr__(self):
@@ -176,6 +198,20 @@ class FlagNames(db.Model):
     language = db.Column(db.String(5), nullable=False, default='')
     name = db.Column(db.String(255), nullable=True)
     name_official = db.Column(db.String(255), nullable=True)
+
+class Coordinates(db.Model):
+    __tablename__ = 'coordinates'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    image_id = db.Column(db.String, unique=True, nullable=False)
+    image_url = db.Column(db.String, nullable=False)
+    latitude = db.Column(db.Float, nullable=False)
+    longitude = db.Column(db.Float, nullable=False)
+
+    def __init__(self, image_id, image_url, latitude, longitude):
+        self.image_id = image_id
+        self.image_url = image_url
+        self.latitude = latitude
+        self.longitude = longitude
 
 def chooseCountry():
     number1, number2, number3, number4 = 0, 0, 0, 0
@@ -257,13 +293,11 @@ def drawdefine():
         func.max(Scores.score).label("max_score")
     ).filter(Scores.gamemode_id == 1).group_by(Scores.user_id).subquery()
 
-    # Подзапрос 2: кол-во игр каждого пользователя в режиме 1
     games_played_subq = db.session.query(
         Scores.user_id,
         func.count(Scores.score).label("games_played")
     ).filter(Scores.gamemode_id == 1).group_by(Scores.user_id).subquery()
 
-    # Основной запрос
     drawing_gamemode_scores = db.session.query(
         Users.user_name,
         Scores.score,
@@ -458,6 +492,69 @@ def guess_flags():
                                flag_img=f'https://raw.githubusercontent.com/cristiroma/countries/9f88008d1917f66b13bdc8e03af8a891b5398665/data/flags/SVG/{main_country.code2l}.svg',
                                streak_count=session['streak_count'],
                                show_logout=True)
+    
+@app.route('/coordinates', methods=['GET', 'POST'])
+def coordinates():
+    return render_template('coordinates.html')
+
+@app.route('/check_guess', methods=['POST'])
+def check_guess():
+    data = request.get_json()
+
+    guess_lat = data['lat']
+    guess_lng = data['lng']
+
+    true_lat = data['true_lat']
+    true_lng = data['true_lng']
+
+    distance_km = geometry.haversine(guess_lat, guess_lng, true_lat, true_lng)
+
+    return jsonify({
+        'distance_km': distance_km,
+        'true_lat': true_lat,
+        'true_lng': true_lng
+    })
+
+@app.route("/get_random_image")
+def get_random_image():
+    image_data = db.session.query(Coordinates).order_by(func.random()).first()
+
+    return jsonify({
+        "image_id": image_data.image_id,
+        "image_url": image_data.image_url,
+        "latitude": image_data.latitude,
+        "longitude": image_data.longitude
+    })
+
+@app.route("/save_coordinates_score", methods=['POST'])
+def save_coordinates_score():
+    data = request.get_json()
+
+    distance_km = data['distance_km']
+
+    if distance_km < 5:
+        score = 5000
+    else:
+        score = max(0, int(5000 - distance_km * 0.9))
+
+    score_to_write = Scores(user_id=current_user.user_id, gamemode_id=4, score=score)
+    db.session.add(score_to_write)
+    db.session.commit()
+
+    return jsonify({'score': score})
+
+@app.route('/coordinatesdefine', methods=['GET', 'POST'])
+@login_required
+def coordinatesdefine():
+    coordinates_guessing_gamemode_scores = db.session.query (
+        Users.user_name,
+        func.max(Scores.score).label('max_score'),
+        func.count(Scores.score)
+    )   .join(Scores, Users.user_id == Scores.user_id)\
+        .filter(Scores.gamemode_id == 4)\
+        .group_by(Users.user_name)\
+        .order_by(desc('max_score')).all()
+    return render_template('coordinatesdefine.html', coordinates_guessing_gamemode_scores = coordinates_guessing_gamemode_scores, show_logout = True)
 
 if __name__ == '__main__':
     app.run()

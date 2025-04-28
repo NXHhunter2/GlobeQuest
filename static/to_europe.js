@@ -90,3 +90,17 @@ if(document.getElementById("start_guessing_flags")){
     post('/flags');
   });
 }
+
+if(document.getElementById("guess_location")){
+  document.getElementById("guess_location").addEventListener("click", (event) => {
+    event.preventDefault();
+    post('/coordinatesdefine');
+  });
+}
+
+if(document.getElementById("start_guessing_location")){
+  document.getElementById("start_guessing_location").addEventListener("click", (event) => {
+    event.preventDefault();
+    post('/coordinates');
+  });
+}
