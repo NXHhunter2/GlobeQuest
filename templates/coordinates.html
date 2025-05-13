@@ -55,7 +55,6 @@
         if (userMarker) map.removeLayer(userMarker);
         userGuess = e.latlng;
         userMarker = L.marker(e.latlng).addTo(map);
-        console.log("User guessed:", e.latlng.lat, e.latlng.lng);
     });
 
     let guess_button = document.getElementById("guessButton");

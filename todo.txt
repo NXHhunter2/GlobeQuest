@@ -10,11 +10,12 @@
     ✅ 5b. 'Detecting' mode – add timer for the round ––––> Done!
 ✅ 6. Create DB for images' URL ––––> Done!
 ✅ 7. Add new guessing countries' flags game mode ––––> Done!
+✅ 8. Add new guessing coordinates game mode ––––> Done!
 ...
 --------------------
 Work report should consist of:
-1. UML Use Case Diagram == functional requirements desc. (2nd Class)
-2. UML Activity Diagram (3rd class) (Business processes diagram) AS IS TO BE
+✅ 1. UML Use Case Diagram == functional requirements desc. (2nd Class) ––––> Done!
+✅ 2. UML Activity Diagram (3rd class) (Business processes diagram) AS IS TO BE ––––> Done!
 3. UML Class Diagram ??? Logical Model – during engineering
 4. UML Component Diagram ???? System architecture
 5. UML Deployment Diagram ????

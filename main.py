@@ -519,9 +519,11 @@ def check_guess():
 def get_random_image():
     image_data = db.session.query(Coordinates).order_by(func.random()).first()
 
+    image_url = f'https://raw.githubusercontent.com/NXHhunter2/coordinates-image-db/refs/heads/main/{image_data.image_id}.jpg'
+
     return jsonify({
         "image_id": image_data.image_id,
-        "image_url": image_data.image_url,
+        "image_url": image_url,
         "latitude": image_data.latitude,
         "longitude": image_data.longitude
     })
