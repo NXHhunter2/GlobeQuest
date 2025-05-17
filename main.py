@@ -436,12 +436,12 @@ def save_streak():
 @app.before_request
 def handle_before_request():
     if 'in_detect_page' in session and session['in_detect_page']:
-        if not request.path.startswith('/static/') and request.path not in ['/detect', '/update_streak']:
+        if not request.path.startswith('/static/') and request.path not in ['/detect', '/update_streak'] and not request.path.startswith('/.well-known/appspecific/'):
             session['streak_count'] = 0
             session['in_detect_page'] = False
             session.modified = True
-    elif 'in_flag_page' in session and session['in_flag_page']:
-        if not request.path.startswith('/static/') and request.path not in ['/flags', '/update_streak']:
+    if 'in_flag_page' in session and session['in_flag_page']:
+        if not request.path.startswith('/static/') and request.path not in ['/flags', '/update_streak'] and not request.path.startswith('/.well-known/appspecific/'):
             session['streak_count'] = 0
             session['in_flag_page'] = False
             session.modified = True

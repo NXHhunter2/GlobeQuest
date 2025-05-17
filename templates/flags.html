@@ -103,9 +103,9 @@
         })
         .then(res => res.json())
         .then(data => {
-            if (response == 0 || response == 2) {
-                const streakCount = data.streak_count;
-            
+        if (response == 0 || response == 2) {
+            const streakCount = data.streak_count;
+        
             fetch('/save_streak', {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
