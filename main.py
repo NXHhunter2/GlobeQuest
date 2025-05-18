@@ -17,7 +17,7 @@ app = Flask(__name__)
 app.secret_key = "ThOD4fSYjEDhma9YgIq33NIcgSJhqxDA4hHTPqlDzXY"
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:020Kruzer020@localhost/GlobeQuest'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://hosting:020Kruzer020@amvera-transmittance-cnpg-globequest-db-rw/GlobeQuest'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 load_dotenv()
@@ -559,5 +559,5 @@ def coordinatesdefine():
     return render_template('coordinatesdefine.html', coordinates_guessing_gamemode_scores = coordinates_guessing_gamemode_scores, show_logout = True)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port=80)
     app.secret_key = 'ThOD4fSYjEDhma9YgIq33NIcgSJhqxDA4hHTPqlDzXY'
