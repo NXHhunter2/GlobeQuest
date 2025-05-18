@@ -5,6 +5,8 @@ meta:
     version: 3.10
 build:
   requirementsPath: requirements.txt
+  packages:
+    - libgl1
 run:
   command: gunicorn --bind 0.0.0.0:80 main:app
   persistenceMount: /data
