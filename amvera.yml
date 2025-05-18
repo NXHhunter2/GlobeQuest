@@ -1,13 +1,13 @@
 meta:
-  environment: python
+  environment: docker
   toolchain:
-    name: pip
-    version: 3.10
+    name: docker
 build:
-  requirementsPath: requirements.txt
-  packages:
-    - libgl1
+  dockerfile: Dockerfile
+  skip: false
 run:
-  command: gunicorn --bind 0.0.0.0:80 main:app
+  image: null
+  command: gunicorn
+  args: '["main:app", "--bind", "0.0.0.0:80"]'
   persistenceMount: /data
-  containerPort: 80
+  containerPort: "80"
