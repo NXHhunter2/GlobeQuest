@@ -99,6 +99,8 @@
         usernameLabel.classList.toggle('active');
     }
 
+    let hideTimeout;
+
     document.querySelector('.user_options').addEventListener('mouseleave', function() {
         hideTimeout = setTimeout(function() {
             document.querySelector('.logout-options').classList.remove("show");

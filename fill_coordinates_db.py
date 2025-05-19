@@ -2,7 +2,7 @@ from main import app, db, MAPILLARY_TOKEN, Coordinates
 import requests
 import random
 
-def get_random_image_from_bbox(access_token):
+def get_random_image_from(access_token):
     lat_min = random.uniform(-85, 84)
     lon_min = random.uniform(-180, 179)
     lat_max = lat_min + 1
@@ -38,7 +38,7 @@ def save_images_to_db(n=500):
         existing_ids = set(i.image_id for i in Coordinates.query.all())
 
         while Coordinates.query.count() < n:
-            img = get_random_image_from_bbox(MAPILLARY_TOKEN)
+            img = get_random_image_from(MAPILLARY_TOKEN)
             if img and img["image_id"] not in existing_ids:
                 new_record = Coordinates(
                     image_id=img["image_id"],
