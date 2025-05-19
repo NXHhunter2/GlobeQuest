@@ -14,13 +14,13 @@ import hashlib
 import os
 
 app = Flask(__name__)
+load_dotenv()
 app.secret_key = "ThOD4fSYjEDhma9YgIq33NIcgSJhqxDA4hHTPqlDzXY"
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://pgtest:b0U4UaH4Sg@185.221.215.33:5432/pgtest'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-load_dotenv()
 MAPILLARY_TOKEN = os.getenv("MAPILLARY_TOKEN")
 
 db = SQLAlchemy(app)
